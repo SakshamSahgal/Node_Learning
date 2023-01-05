@@ -1,0 +1,3 @@
+npm init //to create a package .json (to track dependencies)
+npm install express //to install express (a node package for creating a web server)
+npm install nedb //install nedb package for database
