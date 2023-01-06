@@ -1,4 +1,5 @@
 //----------------------Node Packages-----------------------------------
+const { response } = require("express");
 const express = require("express"); //includiing express package for creating a server
 const req = require("express/lib/request");
 const res = require("express/lib/response");
@@ -18,7 +19,11 @@ app.use(express.static('Public')) //the public folder is what is visible to the 
 app.use(express.json({limit : '1mb'} )); //telling that my app will be sending/recieving data in json format (limiting to 1MB)
 
 
+app.get('/api',(request,response) =>{
+  response.json({msg : "mai server hu!"});
+});
 
+//this method gets data from the client to the server
 app.post('/api',(request,response) => { //request is a parameter that gets what the client sends and response sends back to the client
   console.log("server got = ");
   console.log(request.body.data);
