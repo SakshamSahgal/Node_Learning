@@ -20,12 +20,17 @@ function Authenticate()
         pass : document.getElementById("login_pass").value
     }
 
-    let server_response = SendToServer(Login_Credentials,'/auth_api');
-    server_response.then((response)=>console.log(response));
+    if(Login_Credentials.name != "" && Login_Credentials.pass != "")
+    {
+        let server_response = SendToServer(Login_Credentials,'/auth_api');
+        server_response.then((response)=>console.log(response));
+    }
+    else
+        alert("You cant leave fields empty");    
 }
 
 function Register()
-{
+{   
     let Register_Credentials = { //getting the crenditials from the input field
         name : document.getElementById("register_name").value,
         pass : document.getElementById("register_pass").value
@@ -36,4 +41,6 @@ function Register()
         let server_response = SendToServer(Register_Credentials,'/register_api');
         server_response.then((response)=>console.log(response));
     }
+    else
+        alert("You cant leave fields empty");    
 }

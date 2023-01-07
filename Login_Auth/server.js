@@ -20,18 +20,15 @@ app.get('/api',(request,response) =>{
 
 });
 
-//this method gets data from the client to the server
-app.post('/auth_api',(req,res) => { //request is a parameter that gets what the client sends
+
+app.post('/auth_api',(req,res) => { //Authorizes user
   
   console.log(req.body);
-  const data_to_find = {
-    data : req.body
-  }
 
   const database = new Datastore("Database/users.db");
   database.loadDatabase();
   
-  database.find(req.body,(err,data) =>{ //finding in database
+  database.find(req.body,(err,data) =>{ //finding user in database
 
       let verdict = {
         status : "fail",
@@ -48,7 +45,7 @@ app.post('/auth_api',(req,res) => { //request is a parameter that gets what the 
       }
       res.json(verdict);
     });
-    
+
 })
 
 //this method gets data from the client to the server
