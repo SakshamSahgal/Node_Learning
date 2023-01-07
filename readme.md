@@ -20,7 +20,7 @@
 > * NEDB for Database (a Node package that stores data into a .db file in json format)
 > * Made a small website that has two options - login and register
 > 	<div align="center">
->	<img src="Screenshots/Login_Auth.png" width="300" height="400">
+>	<img src="Screenshots/Login_Auth.png" width="300" height="500">
 >	</div>
 > 
 > > * If user logs in, the server checks if a matching JSON is in the database (Database/Users.db) 
