@@ -3,7 +3,8 @@ function SendToServer(data_to_send) //function that sends data (string) passed t
 {
     console.log("sending " + data_to_send);
     const Obj_To_Send = {
-        data : data_to_send
+        data : data_to_send,
+        no : 1
     }
 
     const send_package_obj = {
