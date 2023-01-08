@@ -12,17 +12,36 @@ async function SendToServer(JSON_to_Send,Route)
         return await server_response.json();
 }
 
-function Authenticate()
+function Is_Logged_In() //checks if the user is already logged in
+{
+    let Session = {
+        Session_ID : Cookies.get("Session_ID")
+    }
+    if(Session.Session_ID != undefined )
+    {
+        let Server_Response = SendToServer(Session,"/logged_in");
+        Server_Response.then((response)=>console.log(response));
+    }
+    else
+        console.log("Session ID not set");
+}
+
+function Log_in() //Logs in User
 {
     let Login_Credentials = { //getting the crenditials from the input field
-        name : document.getElementById("login_name").value,
-        pass : document.getElementById("login_pass").value
+        Username : document.getElementById("login_name").value,
+        Password : document.getElementById("login_pass").value
     }
 
-    if(Login_Credentials.name != "" && Login_Credentials.pass != "")
+    if(Login_Credentials.Username != "" && Login_Credentials.Password != "")
     {
         let server_response = SendToServer(Login_Credentials,'/auth_api');
-        server_response.then((response)=>console.log(response));
+        server_response.then((response)=>{
+            console.log(response);
+            if(response.Status == "Pass")
+                Cookies.set("Session_ID",response.Session_ID);
+        });
+        
     }
     else
         alert("You cant leave fields empty");    
@@ -31,11 +50,11 @@ function Authenticate()
 function Register()
 {   
     let Register_Credentials = { //getting the crenditials from the input field
-        name : document.getElementById("register_name").value,
-        pass : document.getElementById("register_pass").value
+        Username : document.getElementById("register_name").value,
+        Password : document.getElementById("register_pass").value
     }
 
-    if(Register_Credentials.name != "" && Register_Credentials.pass != "")
+    if(Register_Credentials.Username != "" && Register_Credentials.Password != "")
     {
         let server_response = SendToServer(Register_Credentials,'/register_api');
         server_response.then((response)=>console.log(response));
@@ -43,3 +62,6 @@ function Register()
     else
         alert("You cant leave fields empty");    
 }
+
+
+Is_Logged_In()
