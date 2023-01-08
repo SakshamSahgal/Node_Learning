@@ -9,7 +9,7 @@ async function SendToServer(JSON_to_Send,Route)
         }
     
         let server_response = await fetch(Route,send_package_obj);
-        return await server_response.json();
+        return await server_response.json()
 }
 
 function Is_Logged_In() //checks if the user is already logged in
@@ -19,7 +19,7 @@ function Is_Logged_In() //checks if the user is already logged in
     }
     if(Session.Session_ID != undefined )
     {
-        let Server_Response = SendToServer(Session,"/logged_in");
+        let Server_Response = SendToServer(Session,"/logged_in_api");
         Server_Response.then((response)=>console.log(response));
     }
     else

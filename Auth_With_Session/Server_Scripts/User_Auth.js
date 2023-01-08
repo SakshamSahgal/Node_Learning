@@ -1,0 +1,119 @@
+const Datastore = require("nedb"); //including the nedb node package for database 
+
+//NEDB
+const users_database = new Datastore("Database/users.db");
+const logged_in_database = new Datastore("Database/Currently_Logged_in.db");
+
+
+function Register_User(User_Credentials,res) 
+{
+    console.log(User_Credentials);
+    //NEDB
+    users_database.loadDatabase();
+    users_database.find({Username : User_Credentials.Username},(err,data)=>{
+
+    let verdict = {
+    }
+
+    console.log("we found this -> ");
+    console.log(data);
+
+    if(data.length == 0)
+    {
+        users_database.insert(User_Credentials);
+        verdict.status = "User Successfully Registered";
+    }
+    else
+    {
+        verdict.status = "Registration Failed";
+        verdict.description = "Username already Exists";
+    }
+        res.json(verdict);
+  })
+}
+
+
+function Logged_In(Session,res)
+{
+        console.log("searching for");
+        console.log(Session);
+        logged_in_database.loadDatabase();
+        logged_in_database.find({Session_ID : Session},(err,data) => { //checking if the user is currently logged in
+        
+        let verdict = {
+        }
+
+        console.log("found logged in data = ");
+        console.log(data);
+
+        if(data.length == 1)
+            verdict.Status = "Already Logged In";
+        else
+            verdict.Status = "Not Logged In";
+
+        res.json(verdict);
+    })
+}
+
+
+function Authorize_User(User_Credentials,res) //called when user is logs in
+{
+        console.log(User_Credentials);
+
+        users_database.loadDatabase();
+        logged_in_database.loadDatabase();
+
+        users_database.find({Username : User_Credentials.Username },(err,user_list) =>{ //finding user in database
+            
+            console.log("Users matched = ");
+            console.log(user_list);
+
+            let verdict = {
+            }
+
+            if(user_list.length == 1) //username matches
+            {
+                if(user_list[0].Password == User_Credentials.Password)
+                {
+                        logged_in_database.find({Username : User_Credentials.Username},(err,active_list)=> {
+                    
+                        console.log("Active Users Matched = ");
+                        console.log(active_list);
+    
+                        if(active_list.length == 0) //Not currently Logged in
+                        {
+                            verdict.Status = "Pass";
+                            verdict.Session_ID = String(Date.now());
+                                            
+                            let User_Session = {
+                                Username : User_Credentials.Username,
+                                Session_ID : verdict.Session_ID
+                            }     
+                            logged_in_database.insert(User_Session);   
+                        }
+                        else
+                        {
+                            verdict.Status = "Fail";
+                            verdict.Description = "User already Logged in through one device";
+                        }
+                        res.json(verdict);
+                    })
+                }
+                else
+                {
+                    verdict.Status = "Fail";
+                    verdict.Descreption = "Password Wrong!";
+                    res.json(verdict);
+                }
+
+            }
+            else
+            {
+                verdict.Status = "Fail";
+                verdict.Descreption = "User not found in DB";
+                res.json(verdict);
+            }
+    });
+}
+
+module.exports = {Register_User,Logged_In,Authorize_User}
