@@ -1,0 +1,16 @@
+{
+  "name": "auth_with_session",
+  "version": "1.0.0",
+  "description": "Auth with user sessions",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Saksham",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nedb": "^1.8.0"
+  }
+}
