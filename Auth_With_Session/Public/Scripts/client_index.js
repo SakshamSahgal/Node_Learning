@@ -20,7 +20,11 @@ function Is_Logged_In() //checks if the user is already logged in
     if(Session.Session_ID != undefined )
     {
         let Server_Response = SendToServer(Session,"/logged_in_api");
-        Server_Response.then((response)=>console.log(response));
+        Server_Response.then((response)=>{
+            console.log(response);
+            if(response.Status == "Valid (Already Logged In)")
+                location.href = "./Dashboard.html";
+        });
     }
     else
         console.log("Session ID not set");
@@ -40,15 +44,15 @@ function Log_in() //Logs in User
             console.log(response);
             if(response.Status == "Pass")
                 Cookies.set("Session_ID",response.Session_ID);
+                location.href = "./Dashboard.html"
         });
-        
     }
     else
         alert("You cant leave fields empty");    
 }
 
 function Register()
-{   
+{
     let Register_Credentials = { //getting the crenditials from the input field
         Username : document.getElementById("register_name").value,
         Password : document.getElementById("register_pass").value

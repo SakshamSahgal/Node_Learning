@@ -47,7 +47,7 @@ function Logged_In(Session,res)
         console.log(data);
 
         if(data.length == 1)
-            verdict.Status = "Already Logged In";
+            verdict.Status = "Valid (Already Logged In)";
         else
             verdict.Status = "Not Logged In";
 
@@ -89,12 +89,25 @@ function Authorize_User(User_Credentials,res) //called when user is logs in
                                 Username : User_Credentials.Username,
                                 Session_ID : verdict.Session_ID
                             }     
-                            logged_in_database.insert(User_Session);   
+                            logged_in_database.insert(User_Session);
                         }
                         else
                         {
-                            verdict.Status = "Fail";
-                            verdict.Description = "User already Logged in through one device";
+                            // verdict.Status = "Fail";
+                            // verdict.Description = "User already Logged in through one device";
+                            var overrided_session = JSON.parse(JSON.stringify(active_list[0]));
+                            overrided_session.Session_ID = String(Date.now());
+                            console.log("---------------------------");
+                            console.log(active_list[0]);
+                            console.log(overrided_session);
+                            console.log("---------------------------");
+
+                            logged_in_database.update(active_list[0],overrided_session,{},(err,numReplaced)=>{
+                                console.log("Successfully replaced " + numReplaced + " JSON entries");
+                            });
+                            verdict.Status = "Pass";
+                            verdict.Session_ID = overrided_session.Session_ID;
+                            verdict.description = "You were already logged in through one Device , we have logged out that device ";
                         }
                         res.json(verdict);
                     })
@@ -116,4 +129,32 @@ function Authorize_User(User_Credentials,res) //called when user is logs in
     });
 }
 
-module.exports = {Register_User,Logged_In,Authorize_User}
+function Logout(Sessionid,res)
+{
+    logged_in_database.loadDatabase();
+    logged_in_database.find({Session_ID : Sessionid},(err,data)=>{
+        
+        console.log("Found = ");
+        console.log(data);
+
+        let verdict = {
+        }
+
+        if(data.length == 0)
+        {
+            verdict.status = "Fail";
+            verdict.description = "User already logged out";
+            res.json(verdict);
+        }
+        else
+        {
+            logged_in_database.remove(data[0],{}, function (err, numRemoved) {
+                console.log("Entries deleted = " + numRemoved);
+                verdict.status = "Pass";
+                verdict.description = "User successfully Logged out";
+                res.json(verdict);
+            });
+        }
+    });
+}
+module.exports = {Register_User,Logged_In,Authorize_User,Logout}
