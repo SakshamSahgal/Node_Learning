@@ -37,3 +37,20 @@
 > * Made a small website where client sends data through a textbox
 > * Server recieves data through routing ('/api' route used)
 > * Server stores the data into a database.db file locally using NEDB node package
+
+**Single Device Auth**
+
+> How it works?
+> 
+> > <div align="center">
+> > <img src="Screenshots/Page_Loads.png" width="700" height=500">
+> > </div>
+> > 
+> > <div align="center">
+> > <img src="Screenshots/Login.png" width="700" height=500">
+> > </div>
+> > 
+> > <div align="center">
+> > <img src="Screenshots/Logout.png" width="700" height=400">
+> > </div>	
+> > 
