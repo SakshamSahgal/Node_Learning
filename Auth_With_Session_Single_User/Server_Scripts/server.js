@@ -2,7 +2,7 @@
 const { response } = require("express");
 const express = require("express"); //including express package for creating a server
 const app = express();
-const {Register_User,Logged_In,Authorize_User} = require("./Auth") //for using User Auth Script
+const {Validate_Session,Register_User,Authorize_User,Logout} = require("./Auth") //for using User Auth Script
 
 //-----------------------------------------------------initialization-----------------------------------------------------------
 
@@ -19,4 +19,17 @@ app.use(express.json({limit : '1mb'} )); //telling that my app will be sending/r
 
 app.post('/validate_session_api',(req,res) => { //checks if session cookie is valid
     Validate_Session(req.body.Session_ID,res);
+})
+
+//this method gets data from the client to the server
+app.post('/register_api',(req,res) => { //request is a parameter that gets what the client sends
+    Register_User(req.body,res);
+})
+
+app.post('/auth_api',async (req,res) => { //Authorizes user
+    Authorize_User(req.body,res);
+})
+
+app.post('/logout_api',(req,res) => {
+    Logout(req.body.Session_ID,res);
 })
