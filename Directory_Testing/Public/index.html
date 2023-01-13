@@ -1,0 +1,42 @@
+<html>
+<head>
+    <title>File System</title>
+</head>
+<body>
+    Enter Directory : <input type="text" id="directory"> <br> <br>
+    <button onclick="create_dir()">Create Directory</button><button onclick="delete_dir()">Delete Directory</button>
+</body>
+</html>
+<script>
+
+var directory = document.getElementById("directory");
+
+    async function SendToServer(JSON_to_Send,Route)
+    {
+            let send_package_obj = { //packing it in an object
+            method : 'POST' ,
+            headers : {
+                'Content-Type' : 'application/json' //telling that i am sending a JSON
+            } ,
+            body : JSON.stringify(JSON_to_Send)
+            }
+        
+            let server_response = await fetch(Route,send_package_obj);
+            return await server_response.json()
+    }
+
+    function create_dir()
+    {
+        let json = {
+            dir : directory.value
+        }
+        SendToServer(json,"/make_directory").then((x)=>console.log(x));
+    }
+    function delete_dir()
+    {
+        let json = {
+            dir : directory.value
+        }
+        SendToServer(json,"/delete_directory").then((x)=>console.log(x));
+    }
+</script>
