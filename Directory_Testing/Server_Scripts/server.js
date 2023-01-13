@@ -2,6 +2,7 @@
 const express = require("express"); //including express package for creating a server
 const app = express();
 const fs = require("fs");
+const {Create_Directory,Delete_Directory} = require("./directories.js") //for using User Auth Script
 //-----------------------------------------------------initialization-----------------------------------------------------------
 
 //EXPRESS
@@ -17,36 +18,12 @@ app.post('/make_directory',(req,res) => {
 
     const data = req.body;
     console.log("dir to create = " + data.dir);
-
-    var verdict = {}
-
-    if(fs.existsSync(data.dir)) //if directory exists
-        verdict.status = "The directory Already Exists";
-    else
-    {
-        fs.mkdirSync(data.dir,{ recursive: true, force: true });
-        verdict.status = "Successfully Created Directory";
-    }
-    
-    res.json(verdict);
-
+    res.json(Create_Directory(data.dir));
 });
 
 app.post('/delete_directory',(req,res) => {
 
     const data = req.body;
     console.log("dir to delete = " + data.dir);
-
-    let verdict = {}
-
-    if(fs.existsSync(data.dir)) //if directory exists
-    {
-        console.log("dir deleting");
-        fs.rmSync(data.dir, { recursive: true, force: true }) //recurcive true because we want to delete all files and folders inside also
-        verdict.status = "Successfully Deleted Directory";
-    }
-    else
-        verdict.status = "Directory doesnt exists";
-
-    res.json(verdict);
+    res.json(Delete_Directory(data.dir));
 });
