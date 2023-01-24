@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title>AUTH!</title>
+</head>
+<body>
+    <div>
+        <hr><h5>HELLO ! Login! </h5><hr>
+        <form onsubmit="Log_in();return false">
+        <span>email : </span><input type="email" id="login_name" required> <br> <br>
+        <span>Pass : </span><input type="password" id="login_pass" required>  <br> <br>
+        <input type="submit">
+        </form>
+    </div>
+    <div>
+        <hr><h5> NEW USER </h5><hr>
+        <form onsubmit="Register();return false">
+        <span>Username : </span><input type="text" id="register_name" required> <br> <br>
+        <span>Gender : </span> <input type="radio" name="register_gender" value="male" checked> Male <input type="radio" name="register_gender" value="female"> Female <br> <br>
+        <span>Email : </span><input type="email" id="register_email" required> <br> <br>
+        <span>Password : </span><input type="password" id="register_pass" required>  <br> <br>
+        <input type="submit">
+        </form>
+    </div>
+
+    <div id = "OTP_Div" hidden>
+        <form onsubmit="Validate_OTP();return false" >
+        <span>Enter OTP : </span><input type="text" id="input_OTP" required>
+        <input type="submit">
+        </form>
+    </div>
+
+</body>
+</html>
+<!-- importing the JS cookie CDN -->
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script src="Scripts/client_index.js"></script>

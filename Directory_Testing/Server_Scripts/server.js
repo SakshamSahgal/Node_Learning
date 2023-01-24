@@ -2,7 +2,7 @@
 const express = require("express"); //including express package for creating a server
 const app = express();
 const fs = require("fs");
-const {Create_Directory,Delete_Directory} = require("./directories.js") //for using User Auth Script
+const {Create_Directory,Delete_Directory} = require("./directories.js") //for using User Directory Management Script
 //-----------------------------------------------------initialization-----------------------------------------------------------
 
 //EXPRESS
@@ -15,14 +15,12 @@ app.use(express.json({limit : '10mb'} )); //telling that my app will be sending/
 
 
 app.post('/make_directory',(req,res) => {
-
     const data = req.body;
     console.log("dir to create = " + data.dir);
     res.json(Create_Directory(data.dir));
 });
 
 app.post('/delete_directory',(req,res) => {
-
     const data = req.body;
     console.log("dir to delete = " + data.dir);
     res.json(Delete_Directory(data.dir));

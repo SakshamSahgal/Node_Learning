@@ -1,0 +1,117 @@
+<html>
+<head>
+    <style>
+        #table_a,#table_b
+        {
+            margin-left: auto;
+            margin-right: auto;
+            width: 800px;
+            border: solid;
+            border-color: black;
+            border-width: 1px;
+            text-align: center;
+        }
+    </style>
+    <title>NEDB CRUD</title>
+</head>
+<body>
+    <table id="table_a">
+        <tr><th colspan="5">Table A data</th></tr>
+        <tr> <th>A</th> <th> B </th> <th> C </th> <th style="width: 80px;"> Edit </th> <th style="width: 80px;" > Delete </th> </tr>
+        <tr><td>asdasd</td><td>asdsad</td><td>asdasd</td><td>asdsad</td><td>asdasd</td></tr>
+    </table>
+    <table id="table_b">
+        <tr><th colspan="5">Table B data</th></tr>
+        <tr> <th>A</th> <th> B </th> <th> C </th> <th style="width: 80px;"> Edit </th> <th style="width: 80px;" > Delete </th> </tr>
+        <tr><td>asdasd</td><td>asdsad</td><td>asdasd</td><td>asdsad</td><td>asdasd</td></tr>
+    </table>
+    <div>
+        <button onclick="fetch_all_data()">Fetch All Data from DB</button>
+        <p>CREATE</p>
+        insert into : <input type="radio" name = "radio_table" value="db_1" checked> table 1 <input type="radio" name = "radio_table" value = "db_2"> table 2 <br> <br>
+        A: <input type="text" id="register_A"> <br>
+        B: <input type="text" id="register_B"> <br>
+        C: <input type="text" id="register_C"> <br>
+        <button onclick="Create_Entry()">Create Entry</button>
+    </div>
+</body>
+</html>
+<script>
+
+    let table_a = document.getElementById("table_a");
+    let table_b = document.getElementById("table_b");
+
+    async function SendToServer(JSON_to_Send,Route)
+    {
+            let send_package_obj = { //packing it in an object
+            method : 'POST' ,
+            headers : {
+                'Content-Type' : 'application/json' //telling that i am sending a JSON
+            } ,
+            body : JSON.stringify(JSON_to_Send)
+            }
+        
+            let server_response = await fetch(Route,send_package_obj);
+            return await server_response.json()
+    }
+
+    function refresh_page()
+    {
+        location.href = "./index.html";
+    }
+    
+    function Create_Entry()
+    {
+        let to_send = {
+            a : document.getElementById("register_A").value,
+            b : document.getElementById("register_B").value,
+            c : document.getElementById("register_C").value
+        }
+
+        let radio_values = document.getElementsByName("radio_table"); //getting refrence to group of radio buttons
+        
+        radio_values.forEach((x)=>{ //Iterating over each radio button to get which is checked 
+        //console.log(x.checked  + " , " + x.value);
+           if(x.checked == true)
+            to_send.db = x.value; 
+        })
+
+        console.log("going to send");
+        console.log(to_send);
+
+        var server_response = SendToServer(to_send,'/Enter_data_api');
+        server_response.then((x) => {console.log(x);});
+    }
+
+    function fetch_all_data()
+    {
+         SendToServer({},"/Fetch_All_Data_api").then((fetched_json)=>{
+             console.log(fetched_json);
+             
+             fetched_json.fetched_data.forEach((table_data)=>{
+                console.log("---");
+                table_data.forEach((row_data_json)=>{
+                    console.log(row_data_json);
+
+                    var row = table_a.insertRow(2); //inserting at the second index (since index 0 is table heading and 1 is coloumn heading)
+                    var cell_A = row.insertCell(0);
+                    var cell_B = row.insertCell(1);
+                    var cell_C = row.insertCell(2);
+                    var Edit_cell = row.insertCell(3);
+                    var Delete_cell = row.insertCell(4);
+
+                    cell_A.textContent = row_data_json.a;
+                    cell_B.textContent = row_data_json.b;
+                    cell_C.textContent = row_data_json.c;
+                    Edit_cell.innerHTML = "<Button> EDIT </Button>";
+                    Delete_cell.innerHTML = "<Button> DELETE </Button>";
+
+                })
+             })
+             
+             
+            
+         });
+    }
+
+</script>

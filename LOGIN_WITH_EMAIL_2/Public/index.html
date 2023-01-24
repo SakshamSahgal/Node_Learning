@@ -1,0 +1,57 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+</head>
+<body>
+
+    <div id="Rules">
+        <div>
+            <h3>Username Rules</h3>
+            <p>The number of characters must be between 5 and 15.</p>
+            <p>The string should only contain alphanumeric characters and/or underscores (_). </p>
+            <p>The first character of the string should be alphabetic.</p>
+        </div>
+    
+        <div>
+            <h3>Password Rules</h3>
+            <p>The minimum number of characters must be 8.</p>
+            <p>The string must have at least one digit.</p> 
+            <p>The string must have at least one uppercase character.</p>
+            <p>The string must have at least one lowercase character.</p> 
+            <p>The string must have at least one special character.</p>
+        </div>
+    </div>
+    
+    <div>
+        <hr><h5>Login! </h5><hr>
+        <form onsubmit="Log_in();return false">
+        <span>Email : </span><input type="email" id="login_email" required> <br> <br>
+        <span>Pass : </span><input type="password" id="login_pass" required>  <br> <br>
+        <input type="submit">
+        </form>
+    </div>
+
+    <div id="Register_div">
+        <hr><h5> NEW USER </h5><hr>
+        <form onsubmit="Register();return false">
+        <span>Username : </span><input type="text" id="register_name" required> <br> <br>
+        <span>Gender : </span> <input type="radio" name="register_gender" value="male" checked> Male <input type="radio" name="register_gender" value="female"> Female <br> <br>
+        <span>Email : </span><input type="email" id="register_email" required> <br> <br>
+        <span>Password : </span><input type="password" id="register_pass" required>  <br> <br>
+        <input type="submit">
+        </form>
+    </div>
+    <div id="OTP_div" hidden>
+        <form onsubmit="Validate_OTP();return false">
+            <span> Enter OTP : </span>  <input type="text" id="input_OTP" required> <br> <br>
+            <input type="submit">
+        </form>
+    </div>
+</body>
+</html>
+<!-- importing the JS cookie CDN -->
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script src="./Scipts/client_index.js"></script>

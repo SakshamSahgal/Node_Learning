@@ -1,0 +1,74 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USER PROFILE</title>
+</head>
+<body>
+    <button id="logout_User" onclick="Delete_Account()">Delete My Account</button>
+</body>
+    <!-- importing the JS cookie CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+</html>
+<script>
+
+    async function SendToServer(JSON_to_Send,Route)
+    {
+            let send_package_obj = { //packing it in an object
+            method : 'POST' ,
+            headers : {
+                'Content-Type' : 'application/json' //telling that i am sending a JSON
+            } ,
+            body : JSON.stringify(JSON_to_Send)
+            }
+        
+            let server_response = await fetch(Route,send_package_obj);
+            return await server_response.json()
+    }
+
+    function Validate_Session() //Checks if the user is already logged in
+    {
+        let Session = {
+            Session_ID : Cookies.get("Session_ID")
+        }
+
+        if(Session.Session_ID != undefined )
+        {
+            let Server_Response = SendToServer(Session,"/validate_session_api");
+            Server_Response.then((response)=>{
+                console.log(response);
+                if(response.Status == "Invalid Session")
+                {
+                    Cookies.remove("Session_ID");
+                    location.href = "./logged_out.html";
+                }
+            });
+        }
+        else
+        {
+            console.log('Session ID not set');
+            location.href = "./index.html";
+        }
+    }
+
+
+
+    function Delete_Account()
+    {
+        let Session = {
+            Session_ID : Cookies.get("Session_ID")
+        }
+
+        SendToServer(Session,"/Delete_Account").then((response)=>{
+            console.log(response);
+            Cookies.remove("Session_ID");
+            if(response.Status == "Invalid Session")
+                location.href = "./logged_out.html";
+            else
+                location.href = "./index.html"; //successfully deleted account
+        })
+    }
+
+    Validate_Session();
+</script>

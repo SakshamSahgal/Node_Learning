@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+    async function SendToServer(JSON_to_Send,Route)
+    {
+            let send_package_obj = { //packing it in an object
+            method : 'POST' ,
+            headers : {
+                'Content-Type' : 'application/json' //telling that i am sending a JSON
+            } ,
+            body : JSON.stringify(JSON_to_Send)
+            }
+        
+            let server_response = await fetch(Route,send_package_obj);
+            return await server_response.json()
+    }
+</script>
