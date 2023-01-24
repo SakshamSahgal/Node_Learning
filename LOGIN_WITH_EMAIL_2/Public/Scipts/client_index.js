@@ -62,7 +62,9 @@ function Register()
         {
             document.getElementById("OTP_div").hidden = false;
             document.getElementById("Register_div").hidden = true;
-        }else
+            document.getElementById("Login_div").hidden = true;
+        }
+        else
         {
             let problem = response.Username_Judgement + " , " + response.Password_Judgement + "," + response.Email_Judgement;
             alert(problem);
