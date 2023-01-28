@@ -1,0 +1,68 @@
+<html>
+<head>
+    <title>Image Testing</title>
+    <!-- For cropper CSS -->
+    <link rel="stylesheet" href="./CSS/cropper.min.css">
+    <link rel="stylesheet" href="./CSS/indexCSS.css">
+</head>
+<body>
+    <div class="container">
+        <div>
+            <input type="file"  accept="image/x-png,image/jpg,image/jpeg,image/gif" id="upload_photo">
+        </div>
+        <div>
+            <img id="preview" width="200" src="./decoded-image.gif"/>
+            <button id="cropImageBtn">Crop Image</button>
+        </div>
+        <div>
+             <img src="" id="output">
+        </div>
+    </div>
+    
+</body>
+</html>
+
+<!-- For cropper JS -->
+<script src="./js/cropper.min.js"></script> 
+<script>    
+
+
+const image = document.getElementById("preview");
+const cropper = new Cropper(image,{
+    aspectRatio : 0,
+    
+})
+
+
+const FileInput = document.getElementById("upload_photo");
+
+        async function SendToServer(JSON_to_Send,Route)
+        {
+                let send_package_obj = { //packing it in an object
+                method : 'POST' ,
+                headers : {
+                    'Content-Type' : 'application/json' //telling that i am sending a JSON
+                } ,
+                body : JSON.stringify(JSON_to_Send)
+                }
+            
+                let server_response = await fetch(Route,send_package_obj);
+                return await server_response.json()
+        }
+
+        function On_Image_Load() //when image is uploaded successfully
+        {
+            const preview = document.getElementById("preview"); //getting refrence to the preview img tag
+            const reader = new FileReader(); //creating a new file reader
+            reader.addEventListener("load",()=>{
+                image64 = reader.result;
+                console.log(image64); //printing the DataURI 
+                preview.src = image64; //updating the preview image [converting blob to ImageURI to display it]
+            })
+            reader.readAsDataURL(FileInput.files[0]); //converting image to data URI format
+        }
+
+        FileInput.addEventListener("change",On_Image_Load);
+
+
+</script>

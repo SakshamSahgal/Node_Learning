@@ -1,0 +1,44 @@
+//------------------------------------------------------------Node Packages-----------------------------------------------------
+
+//EXPRESS
+const express = require("express"); //including express package for creating a server
+const path = require("path");
+const app = express();
+const port = 3000;
+app.listen(port); //function called when the server starts listening
+app.use(express.static('Public')) //the public folder is what is visible to the client (actually a subset of that folder (depending on the currently rendered webpage and it's used resources))
+app.use(express.json({limit : '1mb'} )); //telling that my app will be sending/recieving data in json format (limiting to 1MB)
+
+
+//FS 
+const fs = require("fs");
+
+// //NEDB
+// const Datastore = require("nedb"); //including the nedb node package for database 
+// const users_database = new Datastore("Database/users.db");
+// const logged_in_database = new Datastore("Database/Currently_Logged_in.db");
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+
+app.get('/PP',(request,response) =>{
+    
+    
+});
+
+
+app.post("/me_want_images",(req,res) => {
+    
+    let get = fs.readFileSync("Profile_Pictures/1.gif"); //getting the images from the server as a buffer Array
+    // get image file extension name
+    const buffer = Buffer.from(get);
+    let base64String = buffer.toString('base64'); //converting it to a base 64 on the server side
+    const extensionName = path.extname("Profile_Pictures/1.gif"); 
+    base64String = "data:image/" + "gif" + ";base64," + base64String;
+    //let base64String = Buffer.from(myArrayBuffer).toString("base64");
+    let img = {
+        images : base64String ,
+        extension : extensionName
+    }
+    res.json(img);
+})

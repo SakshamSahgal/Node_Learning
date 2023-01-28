@@ -1,0 +1,15 @@
+{
+  "name": "image_testing",
+  "version": "1.0.0",
+  "description": "testing sending and recieving images",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Saksham",
+  "license": "ISC",
+  "dependencies": {
+    "cropperjs": "^1.5.13",
+    "express": "^4.18.2"
+  }
+}

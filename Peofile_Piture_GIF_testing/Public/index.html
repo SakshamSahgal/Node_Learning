@@ -1,0 +1,82 @@
+<html>
+<head>
+    <title>Profile</title>
+    <style>
+        #Load_overlay,#profile_picture_pallet /*CSS for load overlay div */
+        {
+            height: 100%;
+            width: 100%;
+            z-index: 3;
+            position: fixed; /* Stay in place */
+            left: 0;
+            top: 0;
+            background-color: rgba(7, 7, 7, 0.55); /* Black w/opacity */
+            backdrop-filter: blur(6px);
+        }
+
+        #loading_img  /*CSS for loading image */
+        {
+            position: absolute;
+            top: 43%;
+            left: 43%;
+        }
+
+        #inner_pallet
+        {
+            margin-top: 10%;
+        }
+    </style>
+</head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<body>
+    <div id="Load_overlay" hidden>
+        <img src="GUI_Resources/Loading.gif" alt="" id="loading_img">
+    </div>
+    <div id="profile_picture_pallet">
+        <div id="inner_pallet" align="center"> 
+            <div class="container">
+                <div class="row">
+                  <div class="col-sm d-flex justify-content-center">
+                    <img src="" alt="" id="test_img">
+                  </div>
+                  <div class="col-sm d-flex justify-content-center">
+                    <img src="https://source.unsplash.com/200x200/?air" alt="">
+                  </div>
+                  <div class="col-sm d-flex justify-content-center">
+                    <img src="https://source.unsplash.com/200x200/?grass" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        
+</body>
+</html>
+
+<script>
+
+async function SendToServer(JSON_to_Send,Route)
+{
+        let send_package_obj = { //packing it in an object
+        method : 'POST' ,
+        headers : {
+            'Content-Type' : 'application/json' //telling that i am sending a JSON
+        } ,
+        body : JSON.stringify(JSON_to_Send)
+        }
+    
+        let server_response = await fetch(Route,send_package_obj);
+        return await server_response.json()
+}    
+
+function get_image()
+{
+    SendToServer({},"/me_want_images").then((x) =>{
+        console.log(x);
+        document.getElementById("test_img").src = x.images;
+    })
+}
+
+get_image();
+
+</script>

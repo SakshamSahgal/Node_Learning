@@ -1,0 +1,35 @@
+<html>
+<head>
+
+    <title>Image Testing hehe</title>
+</head>
+<body>
+    <!-- The existing file input somewhere in our form
+    <p><input type="file"  accept="image/png" name="image" id="upload_photo"></p>
+    <p><img id="preview" width="200" /></p> -->
+
+ <form method="POST" action="/upload" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <input type="submit">
+    </form> 
+</body>
+</html>
+<script>
+
+const FileInput = document.getElementById("upload_photo");
+    
+    async function SendToServer(JSON_to_Send,Route)
+    {
+            let send_package_obj = { //packing it in an object
+            method : 'POST' ,
+            headers : {
+                'Content-Type' : 'application/json' //telling that i am sending a JSON
+            } ,
+            body : JSON.stringify(JSON_to_Send)
+            }
+        
+            let server_response = await fetch(Route,send_package_obj);
+            return await server_response.json()
+    }
+
+</script>

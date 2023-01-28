@@ -28,6 +28,10 @@
                     Cookies.remove("Session_ID");
                     location.href = "./logged_out.html";
                 }
+                else
+                {
+                    
+                }
             });
         }
         else
@@ -72,6 +76,13 @@
             else
                 location.href = "./index.html"; //successfully deleted account
         })
+    }
+
+    function Get_Avatar()
+    {
+        var profile_picture = document.getElementById("User_Avatar");
+
+        profile_picture.src = "https://api.multiavatar.com/" + Cookies.get("Username") + ".svg";
     }
 
     Validate_Session();

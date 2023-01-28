@@ -39,8 +39,8 @@ app.post('/upload',(req,res) => {
     let verdict = {
         status : "Successfully Saved"
     }
-    res.json(verdict);
 
+    res.json(verdict);
 });
 
 function ensureDirectoryExistence(dirname) { //function that makes the directory if it doesn't exist
@@ -48,4 +48,4 @@ function ensureDirectoryExistence(dirname) { //function that makes the directory
       console.log("Yes Directory already exists");
     }else
     fs.mkdirSync(dirname);
-  } 
+  }
