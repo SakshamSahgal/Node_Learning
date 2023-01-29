@@ -1,3 +1,9 @@
+    
+    let loadOverlay = document.getElementById("Load_overlay");
+    let Session = {
+        Session_ID : Cookies.get("Session_ID")
+    }
+
     async function SendToServer(JSON_to_Send,Route)
     {
             let send_package_obj = { //packing it in an object
@@ -12,35 +18,6 @@
             return await server_response.json()
     }
 
-    function Validate_Session() //Checks if the user is already logged in
-    {
-        let Session = {
-            Session_ID : Cookies.get("Session_ID")
-        }
-
-        if(Session.Session_ID != undefined )
-        {
-            let Server_Response = SendToServer(Session,"/validate_session_api");
-            Server_Response.then((response)=>{
-                console.log(response);
-                if(response.Status == "Invalid Session")
-                {
-                    Cookies.remove("Session_ID");
-                    location.href = "./logged_out.html";
-                }
-                else
-                {
-                    
-                }
-            });
-        }
-        else
-        {
-            console.log('Session ID not set');
-            location.href = "./index.html";
-        }
-    }
-
     function Logout()
     {
          if(Cookies.get("Session_ID") == undefined)
@@ -50,9 +27,10 @@
             let Session_Data = {
                 Session_ID : Cookies.get("Session_ID")
             }
-
+            loadOverlay.hidden = false;
             let Server_Response = SendToServer(Session_Data,"/logout_api");
             Server_Response.then((response)=>{
+                loadOverlay.hidden = true;
                 console.log(response);
                 if(Cookies.get("Session_ID") != undefined)
                     Cookies.remove("Session_ID");
@@ -64,11 +42,9 @@
 
     function Delete_Account()
     {
-        let Session = {
-            Session_ID : Cookies.get("Session_ID")
-        }
-
+        loadOverlay.hidden = false;
         SendToServer(Session,"/Delete_Account").then((response)=>{
+            loadOverlay.hidden = true;
             console.log(response);
             Cookies.remove("Session_ID");
             if(response.Status == "Invalid Session")
@@ -78,11 +54,29 @@
         })
     }
 
-    function Get_Avatar()
-    {
-        var profile_picture = document.getElementById("User_Avatar");
 
-        profile_picture.src = "https://api.multiavatar.com/" + Cookies.get("Username") + ".svg";
+    function Get_Profile_Data()
+    {
+        if(Cookies.get("Session_ID") == undefined)
+            location.href = "./index.html";
+        else
+        {
+            loadOverlay.hidden = false;
+            SendToServer(Session,"/Profile_Page_api").then((response) => {
+                loadOverlay.hidden = true;
+                console.log(response);
+                if(response.Status != "Pass")
+                    location.href = "./logged_out.html";
+                else
+                {
+                    document.getElementById("Profile_Photo").src = response.Profile_Picture;
+                    document.getElementById("user_bio").textContent = response.Bio;
+                    document.getElementById("User_Gender").textContent = response.Gender;
+                }
+            })
+
+        }
     }
 
-    Validate_Session();
+
+    Get_Profile_Data();

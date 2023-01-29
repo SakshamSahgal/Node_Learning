@@ -15,7 +15,7 @@ const {Authorize_User} = require("./Auth_Scripts/login.js");
 const {Validate_Session} = require("./Auth_Scripts/validate_session.js");
 const {Logout} = require("./Auth_Scripts/logout.js");
 const {Delete_Account} = require("./Auth_Scripts/Delete_Acc.js");
-
+const {Profile_Page} = require("./Profile_Page.js")
 
 app.post('/register_api',(req,res) => { //registering a user (registration on hold until OTP verification)
     Register(req.body,res);
@@ -39,4 +39,8 @@ app.post('/logout_api',(req,res) => { //Logout user
 
 app.post('/Delete_Account',(req,res) => { //Deletes user account
     Delete_Account(req.body.Session_ID,res);
+})
+
+app.post("/Profile_Page_api",(req,res) => { //Get profile page information
+    Profile_Page(req.body,res);
 })

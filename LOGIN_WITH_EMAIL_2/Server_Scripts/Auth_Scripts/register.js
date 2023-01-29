@@ -185,7 +185,10 @@ function Validate_OTP(OTP_data,res)
                 Gender : OTP_matched_Querry_Array[0].Gender,
                 Email : OTP_matched_Querry_Array[0].Email,
                 Password : OTP_matched_Querry_Array[0].Password,
+                Profile_Picture : "./GUI_Resources/No_photo.gif",
+                Bio : "N/A",
             }
+            
             users_database.insert(User); //inserting into Users Database
             Registration_On_Hold.remove(OTP_matched_Querry_Array[0],{}); //deleting the entry from DB
             let dir = "Media/" + User.Username;

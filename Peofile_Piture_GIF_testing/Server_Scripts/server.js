@@ -21,24 +21,12 @@ const fs = require("fs");
 
 //------------------------------------------------------------------------------------------------------------------------------
 
-app.get('/PP',(request,response) =>{
-    
-    
-});
-
 
 app.post("/me_want_images",(req,res) => {
-    
-    let get = fs.readFileSync("Profile_Pictures/1.gif"); //getting the images from the server as a buffer Array
-    // get image file extension name
-    const buffer = Buffer.from(get);
-    let base64String = buffer.toString('base64'); //converting it to a base 64 on the server side
-    const extensionName = path.extname("Profile_Pictures/1.gif"); 
-    base64String = "data:image/" + "gif" + ";base64," + base64String;
-    //let base64String = Buffer.from(myArrayBuffer).toString("base64");
-    let img = {
-        images : base64String ,
-        extension : extensionName
-    }
-    res.json(img);
+
+    // let get = fs.readFileSync("Profile_Pictures/1.gif"); //getting the images from the server as a buffer Array
+    // res.sendFile(get);
+    app.use(express.static('Public'))
+    res.download("Profile_Pictures/1.gif");
 })
+
