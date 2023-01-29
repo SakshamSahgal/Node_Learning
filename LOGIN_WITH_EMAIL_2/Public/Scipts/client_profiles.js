@@ -2,7 +2,7 @@
     
     let loadOverlay = document.getElementById("Load_overlay");
     let Profile_Picture_Pallet =  document.getElementById("profile_picture_pallet");
-  
+
     
 
     async function SendToServer(JSON_to_Send,Route)
@@ -116,6 +116,7 @@
                 {
                     let in_this_row = 0; //variable to count no of images in a row
                     let Inner_Profile_Pallet = document.getElementById("inner_pallet");
+                    Inner_Profile_Pallet.innerHTML = "";  //clearing earlier childrens if the pallet was opened earlier
                     let this_container = document.createElement("div"); //creating container div
                     this_container.classList.add("container"); 
                     this_container.classList.add("py-5");
@@ -135,9 +136,7 @@
                         img_holder_div.classList.add("p-3"); //padding 3 to the image holder div
                         img_holder_div.classList.add("border");
                         img_holder_div.classList.add("rounded");
-                                                        
-                        //img_holder_div.classList.add("bg-dark"); //adding color to the holder div
-                        //img_holder_div.classList.add("bg-gradient"); //adding color to the holder div
+
                         img_holder_div.align = "center";
 
                         let this_img = document.createElement("img");
@@ -166,3 +165,8 @@
     }
 
     Get_Profile_Data();
+
+    function close_Profile_Pallet()
+    {
+        Profile_Picture_Pallet.hidden = true;
+    }

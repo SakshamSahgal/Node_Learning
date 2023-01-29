@@ -14,19 +14,44 @@
 
     <div id="Load_overlay" hidden>
         <img src="GUI_Resources/Loading.gif" id="loading_img">
+    </div>  
+    
+    <div class="container py-5">
+      <div class="row g-1" >
+        <div class="col-12 border bg-light">
+          <div class="p-2" align="center"><img width="200" src="" id="Profile_Photo"/></div>
+        </div>
+        <div class="row g-1">
+          <div class="col-12 border bg-light">
+            <div class="p-2" align="center"><button id="change_profile_picture" onclick="Change_Profile_Picture()">Change Profile Picture</button></div>
+          </div>
+        </div>
+        <div class="row g-1">
+          <div class="col-12 border bg-light">
+            <div class="p-2" align="center">
+              <span>BIO : </span> <span id="user_bio"></span> <br>
+            <span>Gender : </span> <span id="User_Gender"></span> <br> <br>
+            </div>
+          </div>
+        </div>
+        <div class="row g-1">
+          <div class="col-12 border bg-light">
+            <div class="p-2" align="center">
+              <button onclick="Delete_Account()">Delete My Account</button>
+              <button id="logout_User" onclick="Logout()">Logout</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <p><img width="200" src="" id="Profile_Photo"/></p>
-    <span>BIO : </span> <span id="user_bio"></span> <br>
-    <span>Gender : </span> <span id="User_Gender"></span> <br> <br>
 
-    <button id="change_profile_picture" onclick="Change_Profile_Picture()">Change Profile Picture</button>
-    <button id="logout_User" onclick="Delete_Account()">Delete My Account</button>
-    <button id="logout_User" onclick="Logout()">Logout</button>
+    
+    
 
 
 <div id="profile_picture_pallet" hidden>
-      <button type="button" class="btn-close btn-close-white" aria-label="Close" id="profile_pallet_close_btn"></button>
+      <button type="button" class="btn-close btn-close-white" aria-label="Close" id="profile_pallet_close_btn" onclick="close_Profile_Pallet()"></button>
       <div id="inner_pallet">
       </div>
 </div> 
