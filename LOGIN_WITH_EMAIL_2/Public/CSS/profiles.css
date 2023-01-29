@@ -1,4 +1,4 @@
-#profile_picture_pallet 
+#profile_picture_pallet /*CSS for profile pallet overlay*/
 {
     height: 100%;
     width: 100%;
@@ -24,9 +24,14 @@
     top: 100%;
 }
 
-#profile_pallet_close_btn
+#profile_pallet_close_btn /* CSS for the profile pallet top right close button*/
 {
     position: absolute;
     left : 95%;
     top: 2%;
 }
+
+body{
+    background-image: url(../GUI_Resources/Background.gif);
+}
+

@@ -92,5 +92,54 @@ function Fetch_Profile_Pictures(Session,res)
     })
 }
 
+function Update_Profile_Picture(req_JSON,res)
+{
+        console.log("searching for session -> ");
+        console.log(req_JSON.Session_ID);
+        logged_in_database.loadDatabase(); //loading the logged in database
+        logged_in_database.find({Session_ID : req_JSON.Session_ID},(err,session_match_array) => { //checking if the user is currently logged in
+        
+        let verdict = {
+        }
 
-module.exports = {Profile_Page,Fetch_Profile_Pictures};
+        console.log("found logged in data = ");
+        console.log(session_match_array);
+
+        if(session_match_array.length == 1) //session Matched
+        {
+            let this_user_email = session_match_array[0].Email;
+            users.loadDatabase();
+            users.find({Email : this_user_email},(err,user_matched_array) => {
+
+                console.log("user matched array = ");
+                console.log(user_matched_array);
+                var overrided_JSON = JSON.parse(JSON.stringify(user_matched_array[0]));
+                overrided_JSON.Profile_Picture = req_JSON.Profile_Picture;
+
+                if(user_matched_array.length == 1) //user matched
+                {
+                    users.update(user_matched_array[0],overrided_JSON,{},(err,numReplaced)=>{
+                        console.log("Successfully replaced " + numReplaced + " JSON entries");
+                        verdict.Status = "Success";
+                        verdict.Description = "Successfully Updated Profile Picture";
+                        res.json(verdict);
+                    });
+                }
+                else
+                {
+                    verdict.Status = "Fail";
+                    verdict.Description = "User not found in DB";
+                    res.json(verdict);
+                }
+
+            });
+        }
+        else   //False/Expired Cookie
+        {
+            verdict.Status = "Invalid Session";
+            res.json(verdict);
+        }
+    })
+}
+
+module.exports = {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture};

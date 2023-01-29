@@ -15,7 +15,7 @@ const {Authorize_User} = require("./Auth_Scripts/login.js");
 const {Validate_Session} = require("./Auth_Scripts/validate_session.js");
 const {Logout} = require("./Auth_Scripts/logout.js");
 const {Delete_Account} = require("./Auth_Scripts/Delete_Acc.js");
-const {Profile_Page,Fetch_Profile_Pictures} = require("./Profile_Page.js")
+const {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture} = require("./Profile_Page.js")
 
 app.post('/register_api',(req,res) => { //registering a user (registration on hold until OTP verification)
     Register(req.body,res);
@@ -46,4 +46,8 @@ app.post("/Profile_Page_api",(req,res) => { //Get profile page information
 })
 app.post("/fetch_Profile_Pictures_api",(req,res) => { //fetch all the profile picture paths
     Fetch_Profile_Pictures(req.body.Session_ID,res);
+})
+
+app.post("/update_profile_picture",(req,res) => {
+    Update_Profile_Picture(req.body,res);
 })
