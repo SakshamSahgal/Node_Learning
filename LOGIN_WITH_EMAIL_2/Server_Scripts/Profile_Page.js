@@ -1,6 +1,7 @@
 const Datastore = require("nedb"); //including the nedb node package for database 
 const logged_in_database = new Datastore("Database/Currently_Logged_in.db");
 const users = new Datastore("Database/users.db");
+const fs = require("fs");
 
 function Profile_Page(profile_page_req,res)
 {
@@ -47,5 +48,49 @@ function Profile_Page(profile_page_req,res)
         })
 }
 
+function Fetch_Profile_Pictures(Session,res)
+{
+        console.log("searching for session -> ");
+        console.log(Session);
+        logged_in_database.loadDatabase(); //loading the logged in database
+        logged_in_database.find({Session_ID : Session},(err,data) => { //checking if the user is currently logged in
+        
+        let verdict = {
+        }
 
-module.exports = {Profile_Page};
+        console.log("found logged in data = ");
+        console.log(data);
+
+        if(data.length == 1) //session Matched
+        {
+            const files = fs.readdirSync("./Public/GUI_Resources/Profile_Pictures");
+
+            let paths = []
+
+            try {
+                files.forEach( file => {
+                    //console.log(file);
+                    this_path = "./GUI_Resources/Profile_Pictures/" + file;
+                    paths.push(this_path);
+                })
+                verdict.Status = "Pass";
+                verdict.Paths = paths;
+                res.json(verdict);
+            }
+            catch (error)
+            {
+                verdict.Status = "Fail";
+                console.log(error);
+                res.json(verdict);
+            }
+        }
+        else   //False/Expired Cookie
+        {
+            verdict.Status = "Invalid Session";
+            res.json(verdict);
+        }
+    })
+}
+
+
+module.exports = {Profile_Page,Fetch_Profile_Pictures};

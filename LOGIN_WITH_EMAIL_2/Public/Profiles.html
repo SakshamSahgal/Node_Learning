@@ -11,34 +11,25 @@
     <title>USER PROFILE</title>
 </head>
 <body>
+
     <div id="Load_overlay" hidden>
         <img src="GUI_Resources/Loading.gif" id="loading_img">
     </div>
+
     <p><img width="200" src="" id="Profile_Photo"/></p>
     <span>BIO : </span> <span id="user_bio"></span> <br>
     <span>Gender : </span> <span id="User_Gender"></span> <br> <br>
-    <button id="change_profile_picture">Change Profile Picture</button>
+
+    <button id="change_profile_picture" onclick="Change_Profile_Picture()">Change Profile Picture</button>
     <button id="logout_User" onclick="Delete_Account()">Delete My Account</button>
     <button id="logout_User" onclick="Logout()">Logout</button>
 
 
-    <div id="profile_picture_pallet" hidden>
-        <div id="inner_pallet" align="center"> 
-            <div class="container">
-                <div class="row">
-                  <div class="col-sm d-flex justify-content-center">
-                    <img src="./GUI_Resources/Profile_Pictures/cat_eye.gif" alt="" id="test_img">
-                  </div>
-                  <div class="col-sm d-flex justify-content-center">
-                    <img src="https://source.unsplash.com/200x200/?air" alt="">
-                  </div>
-                  <div class="col-sm d-flex justify-content-center">
-                    <img src="https://source.unsplash.com/200x200/?grass" alt="">
-                  </div>
-                </div>
-              </div>
-        </div>
-    </div>
+<div id="profile_picture_pallet" hidden>
+      <button type="button" class="btn-close btn-close-white" aria-label="Close" id="profile_pallet_close_btn"></button>
+      <div id="inner_pallet">
+      </div>
+</div> 
 
 </body>
     <!-- MultiAvatar CDN -->
