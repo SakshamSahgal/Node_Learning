@@ -136,11 +136,19 @@ function Change_Profile_Picture()
                     img_holder_div.classList.add("p-3"); //padding 3 to the image holder div
                     img_holder_div.classList.add("border");
                     img_holder_div.classList.add("rounded");
-                    img_holder_div.style.backgroundColor = "rgba(255, 255, 255, 0.237)";
+
+                    if(response.Paths[i] == response.Current_Profile_Picture) //changing the background color for the already selected profile picture
+                        img_holder_div.style.backgroundColor = "rgba(122, 255, 168, 0.237)";
+                    else
+                        img_holder_div.style.backgroundColor = "rgba(255, 255, 255, 0.237)";
+
                     img_holder_div.align = "center";
 
                     let this_img = document.createElement("img");
                     this_img.src = response.Paths[i];
+
+
+
                     this_img.style.maxWidth = "100%";
                     this_img.style.maxHeight = "100%";
 

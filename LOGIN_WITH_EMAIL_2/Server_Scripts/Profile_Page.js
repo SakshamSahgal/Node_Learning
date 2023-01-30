@@ -62,13 +62,34 @@ function Fetch_Profile_Pictures(Session,res)
                         this_path = "./GUI_Resources/Profile_Pictures/" + file;
                         paths.push(this_path);
                     })
-                    verdict.Status = "Pass";
-                    verdict.Paths = paths;
-                    res.json(verdict);
+
+                    users.loadDatabase();
+                    let email = Session_Result[0].Email;
+                    users.find( {Email : email} , (err,user_matched_array) => { //searching the user with this email
+
+                        console.log("Users Matched Array");
+                        console.log(user_matched_array);
+                        
+                        if(user_matched_array.length == 1)
+                        {
+                            let Current_Profile_Picture = user_matched_array[0].Profile_Picture;
+                            verdict.Status = "Pass";
+                            verdict.Paths = paths;
+                            verdict.Current_Profile_Picture = Current_Profile_Picture;
+                            res.json(verdict);
+                        }
+                        else
+                        {
+                            verdict.Status = "Fail";
+                            verdict.Description = "User not Found In DB";
+                            res.json(verdict);
+                        }
+                    })
                 }
                 catch (error)
                 {
                     verdict.Status = "Fail";
+                    verdict.Datastore = "Cannot fetch files in Directory";
                     console.log(error);
                     res.json(verdict);
                 }
