@@ -15,7 +15,7 @@ const {Authorize_User} = require("./Auth_Scripts/login.js");
 const {Validate_Session} = require("./Auth_Scripts/validate_session.js");
 const {Logout} = require("./Auth_Scripts/logout.js");
 const {Delete_Account} = require("./Auth_Scripts/Delete_Acc.js");
-const {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture} = require("./Profile_Page.js")
+const {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture,Remove_Profile_Picture} = require("./Profile_Page.js")
 
 app.post('/register_api',(req,res) => { //registering a user (registration on hold until OTP verification)
     Register(req.body,res);
@@ -30,7 +30,14 @@ app.post('/auth_api',async (req,res) => { //Authorizes user
 })
 
 app.post('/validate_session_api',(req,res) => { //checks if session cookie is valid
-    Validate_Session(req.body.Session_ID,res);
+    Validate_Session(req.body.Session_ID).then((Session_matched)=>{
+        verdict = {}
+        if(Session_matched.length)
+            verdict.Status = "Session Matched";
+        else
+            verdict.Status = "Invalid Session";
+        res.json(verdict);
+    })
 })
 
 app.post('/logout_api',(req,res) => { //Logout user
@@ -48,6 +55,9 @@ app.post("/fetch_Profile_Pictures_api",(req,res) => { //fetch all the profile pi
     Fetch_Profile_Pictures(req.body.Session_ID,res);
 })
 
-app.post("/update_profile_picture",(req,res) => {
+app.post("/update_profile_picture_api",(req,res) => {
     Update_Profile_Picture(req.body,res);
+})
+app.post("/Remove_Profile_Picture_api",(req,res) => {
+    Remove_Profile_Picture(req.body.Session_ID,res);
 })

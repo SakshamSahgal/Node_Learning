@@ -59,7 +59,7 @@ function validate_username(str)
     if(/^[A-Za-z][A-Za-z0-9_]{4,14}$/.test(str))
         return "Valid Username";
     else
-        return "invalid Username";
+        return "Invalid Username";
 }
 
 function validate_email(str)
@@ -67,7 +67,7 @@ function validate_email(str)
     let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");
 
     if(regex.test(str))
-        return "valid Email";
+        return "Valid Email";
     else
         return "Invalid Email";
 }
@@ -91,13 +91,13 @@ function Register(User_Credentials,res)
     console.log(User_Credentials);
 
     let verdict={
-        status : "Fail",
+        Status : "Fail",
         Username_Judgement : validate_username(User_Credentials.Username),
         Password_Judgement : validate_password(User_Credentials.Password),
         Email_Judgement : validate_email(User_Credentials.Email)
     }
 
-    if(verdict.Username_Judgement == "invalid Username" || verdict.Password_Judgement == "Invalid Password" || verdict.Email_Judgement == "Invalid Email")
+    if(verdict.Username_Judgement == "Invalid Username" || verdict.Password_Judgement == "Invalid Password" || verdict.Email_Judgement == "Invalid Email")
         res.json(verdict);
     else
     {
@@ -133,8 +133,8 @@ function Register(User_Credentials,res)
                                 }
 
                                 SendMail(email_info); //sending mail
-                                verdict.status = "Success";
-                                verdict.description = "OTP send Successfully";
+                                verdict.Status = "Success";
+                                verdict.Description = "OTP send Successfully";
                                 res.json(verdict);
                             })
                     }
@@ -160,8 +160,8 @@ function Validate_OTP(OTP_data,res)
 
         if(OTP_matched_Querry_Array.length == 0) //no OTP matched
         {
-            verdict.status = "Fail";
-            verdict.description = "Wrong OTP";
+            verdict.Status = "Fail";
+            verdict.Description = "Wrong OTP";
             res.json(verdict);
         }
         else
@@ -174,8 +174,8 @@ function Validate_OTP(OTP_data,res)
           if(time_difference > 300000) //time difference more than 5 minutes (300000 ms)
           {
             Registration_On_Hold.remove(OTP_matched_Querry_Array[0],{}); //deleting the entry from DB
-            verdict.status = "Fail";
-            verdict.description = "OTP expired";
+            verdict.Status = "Fail";
+            verdict.Description = "OTP expired";
             res.json(verdict);
           }
           else
@@ -193,8 +193,8 @@ function Validate_OTP(OTP_data,res)
             Registration_On_Hold.remove(OTP_matched_Querry_Array[0],{}); //deleting the entry from DB
             let dir = "Media/" + User.Username;
             console.log(Create_Directory(dir))//creating a Username directory
-            verdict.status = "Success";
-            verdict.description = "You are Successfully Registered";
+            verdict.Status = "Success";
+            verdict.Description = "You are Successfully Registered";
             res.json(verdict);
           }
         }

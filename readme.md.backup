@@ -1,3 +1,63 @@
+
+
+
+
+
+
+
+
+
+> **lOGIN WITH EMAIL 2**
+
+
+APIs - 
+
+	1. /register_api
+- 	 If Username or Password or Email format is invalid
+
+> 		  verdict 
+> 		  { 
+>         Status : "Fail"
+>         Username_Judgement : "Invalid Username" / "valid Username"
+>         Password_Judgement : "Invalid Password" / "Valid Password"
+>         Email_Judgement : "Invalid Email" / "Valid Email"
+>         }
+
+- 	 If all formats are valid but Username or Email or Both already exists in DB - 
+
+> 		  verdict 
+> 		  { 
+>         Status : "Fail"
+>         Username_Judgement : "Username doesn't exist in DB" / "Username already exist in DB"
+>         Password_Judgement : "Valid Password"
+>         Email_Judgement : "Email doesn't exist in DB" / "Email already Exists in DB"
+>         } 
+	
+- 	 If Both Username and Email doesnt exist in DB and all(Username/Email/Password) formats are valid - 
+
+> 		  verdict 
+> 		  {
+>         status : "Success"
+>         Username_Judgement : "Username doesn't exist in DB" 
+>         Password_Judgement : "Valid Password"
+>         Email_Judgement : "Email doesn't exist in DB"
+>		  Description : "OTP send Successfully";
+>         } 
+
+	2. //validate_OTP
+
+
+
+
+
+
+
+
+
+
+
+
+
 > **Learning Basics**
 
 <div align="center">
@@ -40,14 +100,17 @@
 
 **Single Device Auth**
 
-<div align="center">
-<img src="Screenshots/Page_Loads.png" width="700" height=500">
-</div>
-
-<div align="center">
-<img src="Screenshots/Login.png" width="700" height=500">
-</div>
-
-<div align="center">
-<img src="Screenshots/Logout.png" width="700" height=400">
-</div>	
+> How it works?
+> 
+> > <div align="center">
+> > <img src="Screenshots/Page_Loads.png" width="700" height=500">
+> > </div>
+> > 
+> > <div align="center">
+> > <img src="Screenshots/Login.png" width="700" height=500">
+> > </div>
+> > 
+> > <div align="center">
+> > <img src="Screenshots/Logout.png" width="700" height=400">
+> > </div>	
+> > 

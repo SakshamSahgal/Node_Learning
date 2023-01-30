@@ -65,7 +65,7 @@ function Register()
         loadOverlay.hidden = true; //hiding the load overlay
 
         console.log(response);
-        if(response.status == "Success")
+        if(response.Status == "Success")
         {
             document.getElementById("OTP_div").hidden = false;
             document.getElementById("Register_div").hidden = true;
@@ -92,7 +92,7 @@ function Validate_OTP()
         loadOverlay.hidden = true; //hiding the load overlay
 
         console.log(response);
-        if(response.status == "Success")
+        if(response.Status == "Success")
         {
             alert("Successfully Registered!!");
             Cookies.remove("Username");

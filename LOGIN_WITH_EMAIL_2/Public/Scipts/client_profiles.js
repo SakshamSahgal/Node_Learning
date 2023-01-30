@@ -64,7 +64,6 @@ function Delete_Account()
                 location.href = "./index.html"; //successfully deleted account
         })
     }
-    
 }
 
 
@@ -94,8 +93,9 @@ function Get_Profile_Data()
     }
 }
 
+
 function Change_Profile_Picture()
-{  
+{
     let Session = {
         Session_ID : Cookies.get("Session_ID")
     }
@@ -182,8 +182,30 @@ function Select_Profile_Picture(profile_picture_path)
         Profile_Picture : profile_picture_path
     }
 
-    SendToServer(Update,"/update_profile_picture").then((response) => {
+    SendToServer(Update,"/update_profile_picture_api").then((response) => {
         console.log(response);
+        if(response.Status != "Success")
+            location.href = "./logged_out.html";
+        else
+            Refresh_Page();
     })
 
+}
+
+function Refresh_Page()
+{
+    location.href = "./Profiles.html";
+}
+
+function Remove_Profile_Picture()
+{
+    let Session = {
+        Session_ID : Cookies.get("Session_ID")
+    }
+
+    SendToServer(Session,"/Remove_Profile_Picture_api").then((response) => {
+        console.log(response);
+        if(response.Status == "Success")
+                Refresh_Page();
+    })
 }
