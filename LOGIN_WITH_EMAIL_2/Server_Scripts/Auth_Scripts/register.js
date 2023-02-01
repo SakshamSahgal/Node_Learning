@@ -7,6 +7,7 @@ const Registration_On_Hold = new Datastore("Database/Registration_On_Hold.db");
 const {Create_Directory} = require("../directories.js"); //for creating Directories
 const SendMail = require("./SendMail.js");
 
+const fs = require("fs");
 
 async function Username_Exists_In_DB(username) { //asynchronous function which returns whether username exists in DB
 
@@ -193,6 +194,7 @@ function Validate_OTP(OTP_data,res)
             Registration_On_Hold.remove(OTP_matched_Querry_Array[0],{}); //deleting the entry from DB
             let dir = "Media/" + User.Username;
             console.log(Create_Directory(dir))//creating a Username directory
+            fs.copyFileSync("Public/Profiles/Profile_HTML_Template.html","Public/Profiles/" + User.Username + ".html"); //creating his personal profile page (just copying from the template html)
             verdict.Status = "Success";
             verdict.Description = "You are Successfully Registered";
             res.json(verdict);

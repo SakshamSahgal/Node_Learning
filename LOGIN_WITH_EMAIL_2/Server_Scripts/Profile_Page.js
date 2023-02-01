@@ -4,6 +4,7 @@ const users = new Datastore("Database/users.db");
 const fs = require("fs");
 const {Validate_Session} = require("./Auth_Scripts/validate_session");
 const e = require("express");
+const { json } = require("express");
 
 function Profile_Page(profile_page_req,res)
 {
@@ -149,6 +150,43 @@ function Update_Profile_Picture(req_JSON,res)
 
 }
 
+function Fetch_Profile(req_JSON,res)
+{
+    verdict = {};
+    Validate_Session(req_JSON.Session_ID).then((Session_Result) => {
+        if(Session_Result.length) //valid Session
+        {
+            users.loadDatabase();
+            users.find({Username : req_JSON.Username} , (err,user_matched_array) => {
+
+                if(user_matched_array.length)
+                {
+                    let JSON_to_Send={
+                        Status : "Pass",
+                        Username : user_matched_array[0].Username,
+                        Gender : user_matched_array[0].Gender,
+                        Email : user_matched_array[0].Email,
+                        Profile_Picture : user_matched_array[0].Profile_Picture,
+                        Bio : user_matched_array[0].Bio
+                    }
+                    res.json(JSON_to_Send);
+                }
+                else
+                {
+                    verdict.Status = "Fail";
+                    verdict.Description = "User not found";
+                    res.json(verdict);
+                }
+                
+            })
+        }
+        else
+        {
+            verdict.Status = "Invalid Session";
+            res.json(verdict);
+        }
+    })
+}
 
 
 function Remove_Profile_Picture(Session,res)
@@ -200,10 +238,8 @@ function Remove_Profile_Picture(Session,res)
             verdict.Status = "Invalid Session";
             res.json(verdict);
         }
-
-
     })
     
 }
 
-module.exports = {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture,Remove_Profile_Picture};
+module.exports = {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture,Remove_Profile_Picture,Fetch_Profile};

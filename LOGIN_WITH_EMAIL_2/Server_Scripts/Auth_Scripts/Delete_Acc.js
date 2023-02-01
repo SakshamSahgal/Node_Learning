@@ -28,6 +28,7 @@ function Delete_Account(Sessionid,res)
                     console.log("Entries deleted from users.db = " + numRemoved);
                     let dir = "Media/" + username;
                     console.log(Delete_Directory(dir));
+                    Delete_Directory("Public/Profiles/" + username + ".html"); //deleting his public profile page
                     verdict.Status = "Successfully Deleted Account";
                     res.json(verdict);
                 })
