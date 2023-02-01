@@ -161,15 +161,35 @@ function Fetch_Profile(req_JSON,res)
 
                 if(user_matched_array.length)
                 {
-                    let JSON_to_Send={
-                        Status : "Pass",
-                        Username : user_matched_array[0].Username,
-                        Gender : user_matched_array[0].Gender,
-                        Email : user_matched_array[0].Email,
-                        Profile_Picture : user_matched_array[0].Profile_Picture,
-                        Bio : user_matched_array[0].Bio
+                    if(user_matched_array[0].Username == Session_Result[0].Username) //you are accessing your own Profile
+                    {
+                        verdict.Status = "Fail";
+                        verdict.Description = "You are accessing your own profile";
+                        res.json(verdict);
                     }
-                    res.json(JSON_to_Send);
+                    else
+                    {
+                        let JSON_to_Send={
+                            Status : "Pass",
+                            Username : user_matched_array[0].Username,
+                            Gender : user_matched_array[0].Gender,
+                            Email : user_matched_array[0].Email,
+                            Profile_Picture : user_matched_array[0].Profile_Picture,
+                            Bio : user_matched_array[0].Bio
+                        }
+    
+                        logged_in_database.loadDatabase();
+                        logged_in_database.find({Username : req_JSON.Username} , (err,logged_in_array) => {
+                            
+                            if(logged_in_array.length == 1)
+                                JSON_to_Send.Activity_Status = "Online";
+                            else
+                                JSON_to_Send.Activity_Status = "Offline";
+                            
+                            res.json(JSON_to_Send);
+                        })
+                    }
+
                 }
                 else
                 {
@@ -177,7 +197,6 @@ function Fetch_Profile(req_JSON,res)
                     verdict.Description = "User not found";
                     res.json(verdict);
                 }
-                
             })
         }
         else

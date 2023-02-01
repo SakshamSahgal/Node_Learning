@@ -7,7 +7,7 @@ const port = 3000;
 app.listen(port); //function called when the server starts listening
 app.use(express.static('Public')) //the public folder is what is visible to the client (actually a subset of that folder (depending on the currently rendered webpage and it's used resources))
 app.use(express.json({limit : '1mb'} )); //telling that my app will be sending/recieving data in json format (limiting to 1MB)
-const fs = require("fs");
+
 //------------------------------------------------------------------------------------------------------------------------------
 
 const {Register,Validate_OTP} = require("./Auth_Scripts/register.js");
@@ -16,7 +16,7 @@ const {Validate_Session} = require("./Auth_Scripts/validate_session.js");
 const {Logout} = require("./Auth_Scripts/logout.js");
 const {Delete_Account} = require("./Auth_Scripts/Delete_Acc.js");
 const {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture,Remove_Profile_Picture,Fetch_Profile} = require("./Profile_Page.js")
-const {Delete_Directory} = require("./directories.js")
+
 
 app.post('/register_api',(req,res) => { //registering a user (registration on hold until OTP verification)
     Register(req.body,res);
@@ -49,7 +49,7 @@ app.post('/Delete_Account',(req,res) => { //Deletes user account
     Delete_Account(req.body.Session_ID,res);
 })
 
-app.post("/Profile_Page_api",(req,res) => { //Get profile page information
+app.post("/Profile_Page_api",(req,res) => { //Get your onw profile page information 
     Profile_Page(req.body,res);
 })
 
@@ -57,7 +57,7 @@ app.post("/Fetch_Profile_api",(req,res) => { //fetches public details of a given
     Fetch_Profile(req.body,res);
 })
 
-app.post("/fetch_Profile_Pictures_api",(req,res) => { //fetch all the profile picture paths
+app.post("/fetch_Profile_Pictures_api",(req,res) => { //fetch all the available profile picture paths
     Fetch_Profile_Pictures(req.body.Session_ID,res);
 })
 

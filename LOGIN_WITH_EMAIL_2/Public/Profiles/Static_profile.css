@@ -1,0 +1,31 @@
+#profile_picture_pallet /*CSS for profile pallet overlay*/
+{
+    height: 100%;
+    width: 100%;
+    max-height: 100%;
+    z-index: 3;
+    overflow-y: auto;
+    position: fixed; /* Stay in place */
+    left: 0;
+    top: 0;
+    background-color: rgba(7, 7, 7, 0.55); /* Black w/opacity */
+    backdrop-filter: blur(6px);
+}
+
+
+#inner_pallet
+{
+    top: 100%;
+}
+
+#profile_pallet_close_btn /* CSS for the profile pallet top right close button*/
+{
+    position: absolute;
+    left : 95%;
+    top: 2%;
+}
+
+body{
+    background-image: url(../GUI_Resources/Background.gif);
+}
+

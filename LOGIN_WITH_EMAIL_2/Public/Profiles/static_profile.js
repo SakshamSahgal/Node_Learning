@@ -23,7 +23,7 @@ let loadOverlay = document.getElementById("Load_overlay");
         console.log(req_json);
 
         if(req_json.Session_ID == undefined)
-            location.href = location.href = "./index.html";
+            location.href = location.href = "../index.html";
         else
         {
             loadOverlay.hidden = false; //revealing the load overlay
@@ -38,9 +38,17 @@ let loadOverlay = document.getElementById("Load_overlay");
                     document.getElementById("user_bio").textContent = response.Bio;
                     document.getElementById("User_Gender").textContent = response.Gender;
                     document.getElementById("User_Email").textContent = response.Email;
+                    document.getElementById("Activity_Status").textContent = response.Activity_Status;
+                    if(response.Activity_Status == "Online")
+                        document.getElementById("Activity_Status").style="color: green;";
+                    else
+                        document.getElementById("Activity_Status").style="color: red;";
                 }
                 else
-                    location.href = "../logged_out.html";
+                {
+                    if(response.Description == "You are accessing your own profile")
+                        location.href = "../Profiles.html";
+                }
             })
         }
     }
