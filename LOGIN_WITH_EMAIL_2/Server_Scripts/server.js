@@ -16,7 +16,7 @@ const {Validate_Session} = require("./Auth_Scripts/validate_session.js");
 const {Logout} = require("./Auth_Scripts/logout.js");
 const {Delete_Account} = require("./Auth_Scripts/Delete_Acc.js");
 const {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture,Remove_Profile_Picture,Fetch_Profile} = require("./Profile_Page.js")
-
+const {Fetch_All_Users} = require("./user_queries.js");
 
 app.post('/register_api',(req,res) => { //registering a user (registration on hold until OTP verification)
     Register(req.body,res);
@@ -68,3 +68,6 @@ app.post("/Remove_Profile_Picture_api",(req,res) => {
     Remove_Profile_Picture(req.body.Session_ID,res);
 })
 
+app.post("/Fetch_Users",(req,res)=> {
+    Fetch_All_Users(req.body,res);
+})

@@ -1,4 +1,5 @@
 let loadOverlay = document.getElementById("Load_overlay");
+
     async function SendToServer(JSON_to_Send,Route)
     {
             let send_package_obj = { //packing it in an object
@@ -53,4 +54,25 @@ let loadOverlay = document.getElementById("Load_overlay");
         }
     }
 
+    function Logout()
+    {
+        let Session = {
+            Session_ID : Cookies.get("Session_ID")
+        }
+    
+        if(Session.Session_ID == undefined)
+            location.href = "../index.html";
+        else
+        {
+            loadOverlay.hidden = false;
+            let Server_Response = SendToServer(Session,"/logout_api");
+            Server_Response.then((response)=>{
+                loadOverlay.hidden = true;
+                console.log(response);
+                if(Cookies.get("Session_ID") != undefined)
+                    Cookies.remove("Session_ID");
+                location.href = "../index.html";
+            })
+        }
+    }
     Fetch_Profile_Page();
