@@ -89,6 +89,7 @@ function Get_Profile_Data()
                 document.getElementById("user_bio").textContent = response.Bio;
                 document.getElementById("User_Gender").textContent = response.Gender;
                 document.getElementById("Username").textContent = response.Username;
+                document.getElementById("profile_picture").src = response.Profile_Picture; //top right photo
             }
         })
     }

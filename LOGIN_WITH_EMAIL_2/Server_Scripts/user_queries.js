@@ -23,6 +23,9 @@ function Fetch_All_Users(req_JSON,res)
                     this_user_json.Profile_Picture = element.Profile_Picture;
            
                     logged_in_database.loadDatabase();
+                    
+                    if(element.Username == session_match_array[0].Username) //if this is my Username
+                        verdict.Profile_Picture = element.Profile_Picture;
 
                     logged_in_database.find({Username : element.Username } , (err,match_in_logged_in_array) => {
                         

@@ -17,6 +17,7 @@ const {Logout} = require("./Auth_Scripts/logout.js");
 const {Delete_Account} = require("./Auth_Scripts/Delete_Acc.js");
 const {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture,Remove_Profile_Picture,Fetch_Profile} = require("./Profile_Page.js")
 const {Fetch_All_Users} = require("./user_queries.js");
+const {Fetch_Dashboard_Content} = require("./Dashboard_script.js");
 
 app.post('/register_api',(req,res) => { //registering a user (registration on hold until OTP verification)
     Register(req.body,res);
@@ -68,6 +69,10 @@ app.post("/Remove_Profile_Picture_api",(req,res) => {
     Remove_Profile_Picture(req.body.Session_ID,res);
 })
 
-app.post("/Fetch_Users",(req,res)=> {
+app.post("/Fetch_Users",(req,res)=> { //Fetch all users data to be displayed on users.html
     Fetch_All_Users(req.body,res);
+})
+
+app.post("/Dashboard_api",(req,res)=> { //fetch dashboard contents
+    Fetch_Dashboard_Content(req.body,res);
 })

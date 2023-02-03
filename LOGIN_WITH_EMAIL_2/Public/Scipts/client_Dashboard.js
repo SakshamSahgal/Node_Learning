@@ -14,33 +14,6 @@ let loadOverlay = document.getElementById("Load_overlay");
             return await server_response.json()
     }
 
-    function Validate_Session() //Checks if the user is already logged in
-    {
-        let Session = {
-            Session_ID : Cookies.get("Session_ID")
-        }
-
-        if(Session.Session_ID != undefined )
-        {
-            loadOverlay.hidden = false; //Revealing the load overlay
-            let Server_Response = SendToServer(Session,"/validate_session_api");
-            Server_Response.then((response)=>{
-                loadOverlay.hidden = true; //hiding load overlay
-                console.log(response);
-                if(response.Status == "Invalid Session")
-                {
-                    Cookies.remove("Session_ID");
-                    location.href = "./index.html";
-                }
-            });
-        }
-        else
-        {
-            console.log('Session ID not set');
-            location.href = "./index.html";
-        }
-    }
-
     function Logout()
     {
          if(Cookies.get("Session_ID") == undefined)
@@ -57,10 +30,34 @@ let loadOverlay = document.getElementById("Load_overlay");
                 console.log(response);
                 if(Cookies.get("Session_ID") != undefined)
                     Cookies.remove("Session_ID");
-                    location.href = "./index.html";
+                location.href = "./index.html";
             })
         }
     }
 
-    Validate_Session();
+    function Fetch_Dashboard_Content()
+    {
+        let Session = {
+            Session_ID : Cookies.get("Session_ID")
+        }
+
+        if(Session.Session_ID == undefined)
+            location.href = "./index.html";
+        else
+        {
+            loadOverlay.hidden = false;
+            SendToServer(Session,"/Dashboard_api").then((response) => {
+                console.log(response);
+                loadOverlay.hidden = true;
+                if(response.Status == "Fail" && response.Description == "Invalid Session")
+                    location.href = "../logged_out.html";
+                else if(response.Status == "Pass")
+                {   
+                    document.getElementById("profile_picture").src = response.Profile_Picture;
+                }
+            })
+        }
+    }
+
+    Fetch_Dashboard_Content();
 
