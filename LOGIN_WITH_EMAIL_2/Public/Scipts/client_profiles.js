@@ -44,7 +44,6 @@ function Logout()
 
 function Delete_Account()
 {
-    
     let Session = {
         Session_ID : Cookies.get("Session_ID")
     }
@@ -62,6 +61,31 @@ function Delete_Account()
                 location.href = "./logged_out.html";
             else
                 location.href = "./index.html"; //successfully deleted account
+        })
+    }
+}
+
+function Edit_Profile() //function called when user submits in edit profile
+{
+    let Session = {
+        Session_ID : Cookies.get("Session_ID"),
+        Edit_Username : document.getElementById("Edit_Username").value,
+        Edit_Bio : document.getElementById("Edit_Bio").value,
+        Edit_Gender : ( document.getElementById("Edit_Male").checked  == true ) ? "male" : "female"
+    }
+
+    if(Session.Session_ID == undefined)
+        location.href = "./index.html";
+    else
+    {
+        console.log(Session);
+
+        loadOverlay.hidden = false; //revealing the load overlay
+
+        SendToServer(Session,"/Edit_Profile_Data_api").then((response) => {
+            loadOverlay.hidden = true; //hiding the load overlay again
+            console.log(response);
+
         })
     }
 }
@@ -90,6 +114,7 @@ function Get_Profile_Data()
                 document.getElementById("User_Gender").textContent = response.Gender;
                 document.getElementById("Username").textContent = response.Username;
                 document.getElementById("profile_picture").src = response.Profile_Picture; //top right photo
+                initialize_edit_data(response.Username,response.Bio,response.Gender);
             }
         })
     }
@@ -176,7 +201,6 @@ function Change_Profile_Picture()
     }
 }
 
-Get_Profile_Data();
 
 function close_Profile_Pallet() //called when close button is pressed
 {
@@ -219,3 +243,16 @@ function Remove_Profile_Picture()
                 Refresh_Page();
     })
 }
+
+
+function initialize_edit_data(username,bio,gender) //function that sets the initial value of edit data
+{
+    document.getElementById("Edit_Username").value = username;
+    document.getElementById("Edit_Bio").value = bio;
+    if(gender == "male")
+        document.getElementById("Edit_Male").checked = true;
+    else
+        document.getElementById("Edit_Female").checked = true;
+}
+
+Get_Profile_Data();

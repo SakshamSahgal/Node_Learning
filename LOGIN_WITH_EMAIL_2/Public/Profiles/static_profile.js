@@ -14,6 +14,28 @@ let loadOverlay = document.getElementById("Load_overlay");
             return await server_response.json()
     }
 
+    function Logout()
+    {
+        let Session = {
+            Session_ID : Cookies.get("Session_ID")
+        }
+
+        if(Session.Session_ID == undefined)
+            location.href = "./index.html";
+        else
+        {
+            loadOverlay.hidden = false;
+            let Server_Response = SendToServer(Session,"/logout_api");
+            Server_Response.then((response)=>{
+                loadOverlay.hidden = true;
+                console.log(response);
+                if(Cookies.get("Session_ID") != undefined)
+                    Cookies.remove("Session_ID");
+                location.href = "./index.html";
+            })
+        }
+    }
+
     function Fetch_Profile_Page()
     {
         let req_json = {
@@ -34,12 +56,14 @@ let loadOverlay = document.getElementById("Load_overlay");
                 loadOverlay.hidden = true; //hiding the load overlay
                 if(response.Status == "Pass")
                 {
-                    document.getElementById("Profile_Photo").src = "../" + response.Profile_Picture;
+                    document.getElementById("Profile_Photo").src = "../" + response.His_Profile_Picture;
                     document.getElementById("Username").textContent = response.Username;
                     document.getElementById("user_bio").textContent = response.Bio;
                     document.getElementById("User_Gender").textContent = response.Gender;
                     document.getElementById("User_Email").textContent = response.Email;
                     document.getElementById("Activity_Status").textContent = response.Activity_Status;
+                    document.getElementById("profile_picture").src = "../" + response.My_Profile_Picture;
+
                     if(response.Activity_Status == "Online")
                         document.getElementById("Activity_Status").style="color: green;";
                     else

@@ -15,9 +15,10 @@ const {Authorize_User} = require("./Auth_Scripts/login.js");
 const {Validate_Session} = require("./Auth_Scripts/validate_session.js");
 const {Logout} = require("./Auth_Scripts/logout.js");
 const {Delete_Account} = require("./Auth_Scripts/Delete_Acc.js");
-const {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture,Remove_Profile_Picture,Fetch_Profile} = require("./Profile_Page.js")
+const {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture,Remove_Profile_Picture,Fetch_Profile,Edit_Profile_Data} = require("./Profile_Page.js")
 const {Fetch_All_Users} = require("./user_queries.js");
 const {Fetch_Dashboard_Content} = require("./Dashboard_script.js");
+
 
 app.post('/register_api',(req,res) => { //registering a user (registration on hold until OTP verification)
     Register(req.body,res);
@@ -75,4 +76,8 @@ app.post("/Fetch_Users",(req,res)=> { //Fetch all users data to be displayed on 
 
 app.post("/Dashboard_api",(req,res)=> { //fetch dashboard contents
     Fetch_Dashboard_Content(req.body,res);
+})
+
+app.post("/Edit_Profile_Data_api",(req,res) => { //post called when user submits data to edit profile form
+    Edit_Profile_Data(req.body,res);
 })

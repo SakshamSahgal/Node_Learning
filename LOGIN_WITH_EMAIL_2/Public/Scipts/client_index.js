@@ -69,7 +69,6 @@ function Register()
         {
             document.getElementById("OTP_div").hidden = false;
             document.getElementById("Register_div").hidden = true;
-            document.getElementById("Login_div").hidden = true;
         }
         else
         {

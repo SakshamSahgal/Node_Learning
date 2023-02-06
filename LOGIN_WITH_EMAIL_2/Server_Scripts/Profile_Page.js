@@ -169,25 +169,38 @@ function Fetch_Profile(req_JSON,res)
                     }
                     else
                     {
-                        let JSON_to_Send={
-                            Status : "Pass",
-                            Username : user_matched_array[0].Username,
-                            Gender : user_matched_array[0].Gender,
-                            Email : user_matched_array[0].Email,
-                            Profile_Picture : user_matched_array[0].Profile_Picture,
-                            Bio : user_matched_array[0].Bio
-                        }
-    
-                        logged_in_database.loadDatabase();
-                        logged_in_database.find({Username : req_JSON.Username} , (err,logged_in_array) => {
-                            
-                            if(logged_in_array.length == 1)
-                                JSON_to_Send.Activity_Status = "Online";
+                        users.find({Username : Session_Result[0].Username} , (err,me_matched_array) => { //searching my details in the database to get my profile picture
+
+                            if(me_matched_array.length)
+                            {
+                                let JSON_to_Send={
+                                    Status : "Pass",
+                                    Username : user_matched_array[0].Username,
+                                    Gender : user_matched_array[0].Gender,
+                                    Email : user_matched_array[0].Email,
+                                    His_Profile_Picture : user_matched_array[0].Profile_Picture,
+                                    My_Profile_Picture : me_matched_array[0].Profile_Picture,
+                                    Bio : user_matched_array[0].Bio
+                                }
+            
+                                logged_in_database.loadDatabase();
+                                logged_in_database.find({Username : req_JSON.Username} , (err,logged_in_array) => {
+                                    
+                                    if(logged_in_array.length == 1)
+                                        JSON_to_Send.Activity_Status = "Online";
+                                    else
+                                        JSON_to_Send.Activity_Status = "Offline";
+                                    
+                                    res.json(JSON_to_Send);
+                                })
+                            }   
                             else
-                                JSON_to_Send.Activity_Status = "Offline";
-                            
-                            res.json(JSON_to_Send);
+                            {
+                                verdict.Status = "Invalid Session";
+                                res.json(verdict);
+                            }
                         })
+
                     }
 
                 }
@@ -261,4 +274,103 @@ function Remove_Profile_Picture(Session,res)
     
 }
 
-module.exports = {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture,Remove_Profile_Picture,Fetch_Profile};
+function validate_username(str)
+{
+    //The number of characters must be between 5 and 15.
+    //The string should only contain alphanumeric characters and/or underscores (_).
+    //The first character of the string should be alphabetic.
+
+    if(/^[A-Za-z][A-Za-z0-9_]{4,14}$/.test(str))
+        return "Valid Username";
+    else
+        return "Invalid Username";
+}
+
+async function Check_Username(username)
+{
+    let Username_Judgement = await new Promise((resolve, reject) => { //username querry on users database
+        users.loadDatabase();
+        users.find({Username : username},(err,Username_querry_array) => {
+            if (err) reject(err);
+            let Judgement = Username_querry_array;
+            resolve(Judgement);
+        })
+    })
+
+    return Username_Judgement;
+}
+
+function validate_bio(bio)
+{
+    if(bio.length > 150)
+        return "Your Bio Exceeeds 150 character Limit";
+    else if(bio.length == 0)
+        return "Empty Bio";
+    else
+        return "Bio Accepted";
+}
+
+function Edit_Profile_Data(req_JSON,res)
+{
+    let verdict = {}
+
+    Validate_Session(req_JSON.Session_ID).then((Session_Result) => {
+
+        if(Session_Result.length) //session Matched
+        {
+            verdict.Username_Judgement = validate_username(req_JSON.Edit_Username);
+            verdict.Bio_Judgement = validate_bio(req_JSON.Edit_Bio);
+            verdict.Gender_Judgement = "OK";
+            console.log(verdict.Username_Judgement);
+            console.log(verdict.Bio_Judgement);
+
+            if(verdict.Username_Judgement == "Valid Username" && verdict.Bio_Judgement != "Your Bio Exceeeds 150 character Limit")
+            {
+                users.loadDatabase();
+                users.find({Username : Session_Result[0].Username},(err,user_matched_array) => { //seraching through original username
+                    if(user_matched_array.length)
+                    {
+                        let updated_JSON = JSON.parse(JSON.stringify(user_matched_array[0]));
+                        updated_JSON.Username = req_JSON.Edit_Username;
+                        updated_JSON.Gender = req_JSON.Edit_Gender;
+                        updated_JSON.Bio = req_JSON.Edit_Bio;
+                        users.loadDatabase();
+                        users.update(user_matched_array[0],updated_JSON,{},(err,Entried_Changed) => {
+                            console.log("No of Entries changed in Users DB = " + Entried_Changed);
+
+                            logged_in_database.loadDatabase();
+                            let updated_JSON_logged_in = JSON.parse(JSON.stringify(Session_Result[0]));
+                            updated_JSON_logged_in.Username = req_JSON.Edit_Username;
+                            logged_in_database.update(Session_Result[0],updated_JSON_logged_in,{},(err,Entried_Changed_logged_in) => {
+
+                                console.log("No of entries changed in Logged in DB = " + Entried_Changed_logged_in);
+                                
+                                verdict.Username_Judgement = "OK";
+                                verdict.Bio_Judgement = "OK";
+                                verdict.Status = "Pass";
+                                res.json(verdict);
+                            })
+                        })
+                    }
+                    else
+                    {
+                        verdict.Status = "Fail";
+                        verdict.Description = "User not found in DB";
+                        return verdict;
+                    }
+                })
+            }
+            else
+            {
+                res.json(verdict);
+            }
+        }
+        else
+        {
+            verdict.Status = "Invalid Session";
+            res.json(verdict);
+        }
+    })
+}
+
+module.exports = {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture,Remove_Profile_Picture,Fetch_Profile,Edit_Profile_Data};
