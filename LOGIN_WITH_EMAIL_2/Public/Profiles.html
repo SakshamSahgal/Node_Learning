@@ -81,11 +81,15 @@
                 <br><br>
                 <button id="change_profile_picture" onclick="Change_Profile_Picture()">Change Profile Picture</button>&nbsp; <button id="change_profile_picture" onclick="Remove_Profile_Picture()">Remove Profile Picture</button>
                 <br><br>
-                <form onsubmit="Edit_Profile();return false">
-                  Username : <input type="text" id="Edit_Username" required> <br> <br>
-                  Bio : <br> <textarea style="resize: none;" id="Edit_Bio" rows="4" cols="30" required> </textarea> <br> <br>
-                  Gender : <input type="radio" name="Edit_gender" value="male" id="Edit_Male"> Male <input type="radio" name="Edit_gender" value="female" id="Edit_Female"> Female <br><br>
-                  <input type="submit">
+                <form onsubmit="Update_Username();return false">
+                  Username : <input type="text" id="Edit_Username" required>  <input type="submit" value="Update Username">
+                </form>
+                <form onsubmit="Update_Bio();return false">
+                  Bio : <br> <textarea style="resize: none;" id="Edit_Bio" rows="4" cols="30" required> </textarea> <br><br> <input type="submit" value="Update Bio">
+                </form>
+
+                <form onsubmit="Update_Gender();return false">
+                  Gender : <input type="radio" name="Edit_gender" value="male" id="Edit_Male"> Male <input type="radio" name="Edit_gender" value="female" id="Edit_Female"> Female &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp; <input type="submit" value="Update Gender">
                 </form>
             </div>
           </div>

@@ -3,8 +3,7 @@ const logged_in_database = new Datastore("Database/Currently_Logged_in.db");
 const users = new Datastore("Database/users.db");
 const fs = require("fs");
 const {Validate_Session} = require("./Auth_Scripts/validate_session");
-const e = require("express");
-const { json } = require("express");
+
 
 function Profile_Page(profile_page_req,res)
 {
@@ -310,67 +309,92 @@ function validate_bio(bio)
         return "Bio Accepted";
 }
 
-function Edit_Profile_Data(req_JSON,res)
+function Update_Username(req_JSON,res)
 {
-    let verdict = {}
-
-    Validate_Session(req_JSON.Session_ID).then((Session_Result) => {
-
-        if(Session_Result.length) //session Matched
-        {
-            verdict.Username_Judgement = validate_username(req_JSON.Edit_Username);
-            verdict.Bio_Judgement = validate_bio(req_JSON.Edit_Bio);
-            verdict.Gender_Judgement = "OK";
-            console.log(verdict.Username_Judgement);
-            console.log(verdict.Bio_Judgement);
-
-            if(verdict.Username_Judgement == "Valid Username" && verdict.Bio_Judgement != "Your Bio Exceeeds 150 character Limit")
+    if(validate_username(req_JSON.Edit_Username) == "Valid Username")
+    {
+        Check_Username(req_JSON.Edit_Username).then((Username_querry_array) => {
+            if(Username_querry_array.length) //username exists
             {
-                users.loadDatabase();
-                users.find({Username : Session_Result[0].Username},(err,user_matched_array) => { //seraching through original username
-                    if(user_matched_array.length)
-                    {
-                        let updated_JSON = JSON.parse(JSON.stringify(user_matched_array[0]));
-                        updated_JSON.Username = req_JSON.Edit_Username;
-                        updated_JSON.Gender = req_JSON.Edit_Gender;
-                        updated_JSON.Bio = req_JSON.Edit_Bio;
-                        users.loadDatabase();
-                        users.update(user_matched_array[0],updated_JSON,{},(err,Entried_Changed) => {
-                            console.log("No of Entries changed in Users DB = " + Entried_Changed);
-
-                            logged_in_database.loadDatabase();
-                            let updated_JSON_logged_in = JSON.parse(JSON.stringify(Session_Result[0]));
-                            updated_JSON_logged_in.Username = req_JSON.Edit_Username;
-                            logged_in_database.update(Session_Result[0],updated_JSON_logged_in,{},(err,Entried_Changed_logged_in) => {
-
-                                console.log("No of entries changed in Logged in DB = " + Entried_Changed_logged_in);
-                                
-                                verdict.Username_Judgement = "OK";
-                                verdict.Bio_Judgement = "OK";
-                                verdict.Status = "Pass";
-                                res.json(verdict);
-                            })
-                        })
-                    }
-                    else
-                    {
-                        verdict.Status = "Fail";
-                        verdict.Description = "User not found in DB";
-                        return verdict;
-                    }
-                })
-            }
-            else
-            {
+                let verdict = {
+                    Status : "Fail",
+                    Description : "Username already exists"
+                }
                 res.json(verdict);
             }
+        })
+    }
+    else
+    {
+        let verdict = {
+            Status : "Fail",
+            Description : "Invalid Username"
         }
-        else
-        {
-            verdict.Status = "Invalid Session";
-            res.json(verdict);
-        }
-    })
+        res.json(verdict);
+    }
 }
 
-module.exports = {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture,Remove_Profile_Picture,Fetch_Profile,Edit_Profile_Data};
+function Edit_Profile_Data(req_JSON,res) //function called when user edit his profile data
+{
+    // let verdict = {}
+
+    // Validate_Session(req_JSON.Session_ID).then((Session_Result) => {
+
+    //     if(Session_Result.length) //session Matched
+    //     {
+    //         verdict.Username_Judgement = validate_username(req_JSON.Edit_Username);
+    //         verdict.Bio_Judgement = validate_bio(req_JSON.Edit_Bio);
+    //         verdict.Gender_Judgement = "OK";
+    //         console.log(verdict.Username_Judgement);
+    //         console.log(verdict.Bio_Judgement);
+
+    //         if(verdict.Username_Judgement == "Valid Username" && verdict.Bio_Judgement != "Your Bio Exceeeds 150 character Limit")
+    //         {
+    //             users.loadDatabase();
+    //             users.find({Username : Session_Result[0].Username},(err,user_matched_array) => { //seraching through original username
+    //                 if(user_matched_array.length)
+    //                 {
+    //                     let updated_JSON = JSON.parse(JSON.stringify(user_matched_array[0]));
+    //                     updated_JSON.Username = req_JSON.Edit_Username;
+    //                     updated_JSON.Gender = req_JSON.Edit_Gender;
+    //                     updated_JSON.Bio = req_JSON.Edit_Bio;
+    //                     users.loadDatabase();
+    //                     users.update(user_matched_array[0],updated_JSON,{},(err,Entried_Changed) => {
+    //                         console.log("No of Entries changed in Users DB = " + Entried_Changed);
+
+    //                         logged_in_database.loadDatabase();
+    //                         let updated_JSON_logged_in = JSON.parse(JSON.stringify(Session_Result[0]));
+    //                         updated_JSON_logged_in.Username = req_JSON.Edit_Username;
+    //                         logged_in_database.update(Session_Result[0],updated_JSON_logged_in,{},(err,Entried_Changed_logged_in) => {
+
+    //                             console.log("No of entries changed in Logged in DB = " + Entried_Changed_logged_in);
+                                
+    //                             verdict.Username_Judgement = "OK";
+    //                             verdict.Bio_Judgement = "OK";
+    //                             verdict.Status = "Pass";
+    //                             res.json(verdict);
+    //                         })
+    //                     })
+    //                 }
+    //                 else
+    //                 {
+    //                     verdict.Status = "Fail";
+    //                     verdict.Description = "User not found in DB";
+    //                     return verdict;
+    //                 }
+    //             })
+    //         }
+    //         else
+    //         {
+    //             res.json(verdict);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         verdict.Status = "Invalid Session";
+    //         res.json(verdict);
+    //     }
+    // })
+}
+
+module.exports = {Profile_Page,Fetch_Profile_Pictures,Update_Profile_Picture,Remove_Profile_Picture,Fetch_Profile,Update_Username};

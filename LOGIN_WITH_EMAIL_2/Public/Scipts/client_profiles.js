@@ -5,7 +5,7 @@ let Profile_Picture_Pallet =  document.getElementById("profile_picture_pallet");
 
 
 
-async function SendToServer(JSON_to_Send,Route)
+async function SendToServer(JSON_to_Send,Route) //function used to send json to server
 {
         let send_package_obj = { //packing it in an object
         method : 'POST' ,
@@ -19,7 +19,7 @@ async function SendToServer(JSON_to_Send,Route)
         return await server_response.json()
 }
 
-function Logout()
+function Logout() //function called when user clicks on logout
 {
     let Session = {
         Session_ID : Cookies.get("Session_ID")
@@ -41,8 +41,27 @@ function Logout()
     }
 }
 
+function Update_Username() //function called when user clicks on update username
+{
+    let Session = {
+        Session_ID : Cookies.get("Session_ID"),
+        Edit_Username : document.getElementById("Edit_Username").value,
+    }
 
-function Delete_Account()
+    if(Session.Session_ID == undefined)
+        location.href = "./index.html";
+    else
+    {
+        SendToServer(Session,"/Update_Username_api").then((response) => {
+            
+            console.log(response);            
+            
+        })
+    }
+
+}
+
+function Delete_Account() //function called when user clicks on delete account
 {
     let Session = {
         Session_ID : Cookies.get("Session_ID")
@@ -91,7 +110,7 @@ function Edit_Profile() //function called when user submits in edit profile
 }
 
 
-function Get_Profile_Data()
+function Get_Profile_Data() //function called at the loading of page [fetches the profile page data]
 {
     let Session = {
         Session_ID : Cookies.get("Session_ID")
@@ -121,7 +140,7 @@ function Get_Profile_Data()
 }
 
 
-function Change_Profile_Picture()
+function Change_Profile_Picture() //function called when change profile picture is clicked [function displays the list of available profile pictures]
 {
     let Session = {
         Session_ID : Cookies.get("Session_ID")
@@ -179,7 +198,7 @@ function Change_Profile_Picture()
                     this_img.style.maxWidth = "100%";
                     this_img.style.maxHeight = "100%";
 
-                    this_img.addEventListener("click",Select_Profile_Picture.bind(null,response.Paths[i]));
+                    this_img.addEventListener("click",Select_Profile_Picture.bind(null,response.Paths[i])); //Adding click event listener to image
                     
                     img_holder_div.appendChild(this_img);
                     this_col.appendChild(img_holder_div);
@@ -201,13 +220,12 @@ function Change_Profile_Picture()
     }
 }
 
-
 function close_Profile_Pallet() //called when close button is pressed
 {
     Profile_Picture_Pallet.hidden = true;
 }
 
-function Select_Profile_Picture(profile_picture_path)
+function Select_Profile_Picture(profile_picture_path) //function called when user selects a profile picture (clicks on it)
 {
     console.log(profile_picture_path);
     
@@ -226,12 +244,12 @@ function Select_Profile_Picture(profile_picture_path)
 
 }
 
-function Refresh_Page()
+function Refresh_Page()//function just refreshes the page
 {
     location.href = "./Profiles.html";
 }
 
-function Remove_Profile_Picture()
+function Remove_Profile_Picture() //function called when user clicks on remove profile picture
 {
     let Session = {
         Session_ID : Cookies.get("Session_ID")
