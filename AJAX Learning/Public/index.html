@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ye hai Homepage</title>
+</head>
+<body>
+<button onclick="Refresh()">press me</button>    
+</body>
+</html>
+<!-- including AXIOS CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js" integrity="sha512-LUKzDoJKOLqnxGWWIBM4lzRBlxcva2ZTztO8bTcWPmDSpkErWx0bSP4pdsjNH8kiHAUPaT06UXcb+vOEZH+HpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<div id="data">
+
+</div>
+
+<button onclick="delete_it()">delete data</button>
+
+<script>
+
+    // function callme()
+    // {
+    //     axios.get('/ye').then(response => {
+    //         console.log(response.data)
+    //     })
+    // }
+
+    function delete_it() {  
+        
+    }
+
+   function Refresh()
+   {
+        const xhr = new XMLHttpRequest();
+        
+        xhr.open('GET',"https://jsonplaceholder.typicode.com/photos",true);
+
+
+        xhr.onprogress = function(){
+            document.getElementById("data").textContent = "Loading.."
+        }
+
+        xhr.onload = function () {
+            document.getElementById("data").textContent = (this.response)
+        }
+
+        xhr.send();
+   }
+
+</script>
